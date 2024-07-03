@@ -4,7 +4,6 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  text-align: center;
   padding: 20px;
   background-color: #ffe4e1;
   min-height: 100vh;
@@ -24,21 +23,27 @@
   max-height: 500px; /* 최대 높이를 500px로 제한 */
 }
 
+
+
+.text h1, .text h2 {
+  display: block; /* 블록 요소로 변경 */
+  margin: 0; /* 기본 마진 제거 */
+  font-weight: 700; /* 굵은 글씨체 설정 */
+  color: #ff7074; /* 텍스트 색상 설정 */
+}
+
 .text h1 {
   font-size: 35px;
-  font-weight: 700;
-  color: #ff69b4;
-  margin: 0 auto; /* 가로로 중앙 정렬 */
 }
 
 .text h2 {
-  font-size: 1.5rem;
-  color: #ff69b4;
+  font-size: 54px;
 }
 
 .text p {
   font-size: 1rem;
-  color: #333;
+  color: #FF9494;
+  white-space: pre-wrap; /* 공백과 줄바꿈을 유지 */
 }
 
 button {
@@ -53,7 +58,6 @@ button {
   border-radius: 50px;
   cursor: pointer;
 }
-
 
 /* 애니메이션 정의 */
 @keyframes popOut {
