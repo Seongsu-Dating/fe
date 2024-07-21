@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { iconImage } from "../../constants/Main/path";
 import { searchImage } from "../../constants/Main/path";
-
 
 const Main = () => {
   const navigate = useNavigate();
@@ -24,7 +22,7 @@ const Main = () => {
   const handleSubcategoryClick = (subcategory, category) => {
     setSelectedSubcategories((prev) => {
       const currentSubcategories = prev[category] || [];
-      // 각 카테고리에서 세부 카테고리 중복 선택 방지
+     
       if (currentSubcategories.includes(subcategory)) {
         return {
           ...prev,
@@ -33,7 +31,7 @@ const Main = () => {
       } else {
         return {
           ...prev,
-          [category]: [subcategory], // 선택된 세부 카테고리를 단일 선택으로 설정
+          [category]: [subcategory], 
         };
       }
     });
@@ -79,7 +77,7 @@ const Main = () => {
             신개념 AI추천 데이트코스 메이커, 성수데이팅
           </p>
           <div className="absolute top-0 right-0">
-            <img src="path-to-your-search-icon" alt="Search" />
+            <img src={searchImage} alt="Search" style={{width: '24px', height:'24px'}} /> 
           </div>
         </header>
         <div className="text-black font-bold mb-3 w-full text-left text-sm">
