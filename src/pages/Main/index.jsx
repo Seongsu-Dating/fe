@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { searchImage } from "../../constants/Main/path";
+
+// public/assets/images에서 직접 경로를 설정
+const homeImage = "/assets/images/home.svg";
+const heartImage = "/assets/images/heart.svg";
+const profileImage = "/assets/images/profile.svg";
+const searchImage = "/assets/images/search.svg";
 
 const Main = () => {
   const navigate = useNavigate();
@@ -22,16 +27,27 @@ const Main = () => {
   const handleSubcategoryClick = (subcategory, category) => {
     setSelectedSubcategories((prev) => {
       const currentSubcategories = prev[category] || [];
-     
-      if (currentSubcategories.includes(subcategory)) {
-        return {
-          ...prev,
-          [category]: currentSubcategories.filter((item) => item !== subcategory),
-        };
+
+      if (category === "문화생활" || category === "편하게힐링") {
+        const isSelected = currentSubcategories.includes(subcategory);
+        if (isSelected) {
+          // 이미 선택된 경우 삭제
+          return {
+            ...prev,
+            [category]: currentSubcategories.filter((item) => item !== subcategory),
+          };
+        } else {
+          // 선택되지 않은 경우 추가
+          return {
+            ...prev,
+            [category]: [...currentSubcategories, subcategory],
+          };
+        }
       } else {
+        // 그 외 카테고리는 단일 선택
         return {
           ...prev,
-          [category]: [subcategory], 
+          [category]: [subcategory],
         };
       }
     });
@@ -77,7 +93,7 @@ const Main = () => {
             신개념 AI추천 데이트코스 메이커, 성수데이팅
           </p>
           <div className="absolute top-0 right-0">
-            <img src={searchImage} alt="Search" style={{width: '24px', height:'24px'}} /> 
+            <img src={searchImage} alt="Search" className="w-6 h-6" />
           </div>
         </header>
         <div className="text-black font-bold mb-3 w-full text-left text-sm">
@@ -112,15 +128,15 @@ const Main = () => {
         >
           데이트 코스 만들기
         </button>
-        <footer className="flex justify-around w-full absolute bottom-5">
-          <div className="w-8 h-8">
-            <img src="path-to-your-home-icon" alt="Home" className="w-full h-full" />
+        <footer className="flex justify-between w-full absolute bottom-5 px-5 transform -translate-x-4">
+          <div className="w-6 h-6 flex items-center justify-center">
+            <img src={homeImage} alt="Home" className="w-full h-full" />
           </div>
-          <div className="w-8 h-8">
-            <img src="path-to-your-heart-icon" alt="Heart" className="w-full h-full" />
+          <div className="w-6 h-6 flex items-center justify-center">
+            <img src={heartImage} alt="Heart" className="w-full h-full" />
           </div>
-          <div className="w-8 h-8">
-            <img src="path-to-your-profile-icon" alt="Profile" className="w-full h-full" />
+          <div className="w-6 h-6 flex items-center justify-center">
+            <img src={profileImage} alt="Profile" className="w-full h-full" />
           </div>
         </footer>
       </div>
