@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
 const Result = () => {
+  useEffect(() => {
+    // Load the Google Maps script
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+
+    script.onload = () => {
+      // Initialize the map once the script has loaded
+      const map = new window.google.maps.Map(document.getElementById('map'), {
+        center: { lat: 37.5462, lng: 127.0411 }, // 성수동 위치 API
+        zoom: 12,
+      });
+    };
+  }, []);
+
   return (
     <div className="bg-pink-50 flex items-center justify-center min-h-screen">
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full text-center relative">
@@ -21,11 +38,7 @@ const Result = () => {
             ></path>
           </svg>
         </button>
-        <img
-          src="/path-to-your-donut-image.png"
-          alt="Donut"
-          className="mx-auto w-32 h-32 rounded-full"
-        />
+        <div id="map" className="w-full h-64 rounded-lg"></div>
         <h1 className="text-2xl font-bold text-pink-800 mt-4">데이트코스 생성 결과</h1>
         <p className="text-gray-700 mt-2">오늘의 데이트코스에 관해</p>
         <p className="text-gray-700 mt-1">
