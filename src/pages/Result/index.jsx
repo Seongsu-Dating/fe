@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Result = () => {
   useEffect(() => {
-    // Load the Google Maps script
+ 
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY`;
     script.async = true;
@@ -11,7 +11,7 @@ const Result = () => {
     document.head.appendChild(script);
 
     script.onload = () => {
-      // Initialize the map once the script has loaded
+    
       const map = new window.google.maps.Map(document.getElementById('map'), {
         center: { lat: 37.5462, lng: 127.0411 }, // 성수동 위치 API
         zoom: 12,
