@@ -1,34 +1,42 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { iconImage } from "../../constants/Main/path";
+import { searchImage } from "../../constants/Main/path";
+
 
 const Main = () => {
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [activeButton, setActiveButton] = useState(null);
-  const [selectedSubcategories, setSelectedSubcategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState(new Set());
+  const [selectedSubcategories, setSelectedSubcategories] = useState({});
 
   const handleCategoryClick = (category) => {
-    if (category === selectedCategory) {
-      setSelectedCategory(null);
-      setActiveButton(null);
-    } else {
-      setSelectedCategory(category);
-      setActiveButton(category);
-    }
+    setSelectedCategories((prev) => {
+      const newSelection = new Set(prev);
+      if (newSelection.has(category)) {
+        newSelection.delete(category);
+      } else {
+        newSelection.add(category);
+      }
+      return newSelection;
+    });
   };
 
   const handleSubcategoryClick = (subcategory, category) => {
-    if (category === "문화생활" || category === "편하게힐링") {
-      setSelectedSubcategories((prevSelected) => {
-        if (prevSelected.includes(subcategory)) {
-          return prevSelected.filter((item) => item !== subcategory);
-        } else {
-          return [...prevSelected, subcategory];
-        }
-      });
-    } else {
-      setSelectedSubcategories([subcategory]);
-    }
+    setSelectedSubcategories((prev) => {
+      const currentSubcategories = prev[category] || [];
+      // 각 카테고리에서 세부 카테고리 중복 선택 방지
+      if (currentSubcategories.includes(subcategory)) {
+        return {
+          ...prev,
+          [category]: currentSubcategories.filter((item) => item !== subcategory),
+        };
+      } else {
+        return {
+          ...prev,
+          [category]: [subcategory], // 선택된 세부 카테고리를 단일 선택으로 설정
+        };
+      }
+    });
   };
 
   const renderSubcategories = (category) => {
@@ -36,8 +44,8 @@ const Main = () => {
       밥: ["한식", "중식", "일식", "양식"],
       카페: ["디저트", "테마", "커피전문점"],
       문화생활: ["영화", "재즈바", "미술관", "음악회", "전시회"],
-      편하게힐링: ["찜질/사우나", "마사지", "호캉스"],  
-    }; 
+      편하게힐링: ["찜질/사우나", "마사지", "호캉스"],
+    };
 
     if (!subcategories[category]) return null;
 
@@ -47,7 +55,9 @@ const Main = () => {
           <button
             key={index}
             className={`text-xs font-bold py-1 px-2 rounded-full border ${
-              selectedSubcategories.includes(subcategory) ? "text-[#FF7074] border-[#FF7074]" : "text-black-500 border-gray-300"
+              (selectedSubcategories[category] || []).includes(subcategory)
+                ? "text-[#FF7074] border-[#FF7074]"
+                : "text-black-500 border-gray-300"
             }`}
             onClick={() => handleSubcategoryClick(subcategory, category)}
           >
@@ -82,15 +92,15 @@ const Main = () => {
                 <span className="text-black-500 text-sm font-bold">{category}</span>
                 <button
                   className={`font-bold text-white border-none py-1 px-2 rounded-full text-xs min-w-[80px] ${
-                    activeButton === category ? "bg-[#DCBFC0]" : "bg-pink-500"
+                    selectedCategories.has(category) ? "bg-[#DCBFC0]" : "bg-pink-500"
                   }`}
-                  style={{ backgroundColor: activeButton === category ? "#DCBFC0" : "#FF7074" }}
+                  style={{ backgroundColor: selectedCategories.has(category) ? "#DCBFC0" : "#FF7074" }}
                   onClick={() => handleCategoryClick(category)}
                 >
                   선택
                 </button>
               </div>
-              {selectedCategory === category && renderSubcategories(category)}
+              {selectedCategories.has(category) && renderSubcategories(category)}
               {(category === "문화생활" || category === "편하게힐링") && (
                 <div className="text-xs text-gray-500 mb-2">*복수선택가능</div>
               )}
@@ -99,7 +109,7 @@ const Main = () => {
         </div>
         <button
           className="bg-pink-500 text-white font-bold border-none py-2.5 px-14 rounded-full mt-5 self-center text-xs block mx-auto"
-          style={{ backgroundColor: "#FF7074" }}
+          style={{ backgroundColor: "#FF7074", marginTop: "2rem", marginBottom: "3rem" }}
           onClick={() => navigate("/")}
         >
           데이트 코스 만들기
