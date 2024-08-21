@@ -1,13 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const DateCourseResult = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
       <div className="md:flex">
         <div className="p-8">
           <div className="uppercase tracking-wide text-sm text-pink-500 font-semibold">데이트코스 생성 결과</div>
           <p className="mt-2 text-gray-500">오늘의 데이트코스에 관해</p>
-          <p className="mt-2 text-gray-500">세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용 세부내용</p>
+          <p className="mt-2 text-gray-500">세부내용 세부내용 세부내용 ...</p>
           
           <div className="mt-4">
             <div className="flex items-center">
@@ -35,7 +38,7 @@ const DateCourseResult = () => {
           </div>
 
           <div className="mt-4">
-            <button className="bg-pink-500 text-white p-4 rounded-lg w-full">내 컬렉션에 추가하기</button>
+            <button className="bg-pink-500 text-white p-4 rounded-lg w-full" onClick={() => navigate("/likedDC")}>내 컬렉션에 추가하기</button>
           </div>
         </div>
       </div>

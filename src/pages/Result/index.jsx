@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
 const Result = () => {
+  const navigate = useNavigate();
   useEffect(() => {
  
     const script = document.createElement('script');
@@ -47,7 +48,7 @@ const Result = () => {
           캐주얼할 듯 설레는 데이트로 연인의 마음을 움직이는 하루가 되길
           바래요!
         </p>
-        <button className="bg-pink-500 text-white font-bold py-2 px-4 rounded-full mt-6 hover:bg-pink-600">
+        <button className="bg-pink-500 text-white font-bold py-2 px-4 rounded-full mt-6 hover:bg-pink-600" onClick={() => navigate("/result2")}>
           내 컬렉션에 추가하기
         </button>
         <button className="mt-4 text-gray-500 hover:text-gray-700">

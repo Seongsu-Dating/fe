@@ -124,7 +124,7 @@ const Main = () => {
         <button
           className="bg-pink-500 text-white font-bold border-none py-2.5 px-14 rounded-full mt-5 self-center text-xs block mx-auto"
           style={{ backgroundColor: "#FF7074", marginTop: "2rem", marginBottom: "3rem" }}
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/createDC")}
         >
           데이트 코스 만들기
         </button>
