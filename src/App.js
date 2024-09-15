@@ -1,90 +1,54 @@
-import { BrowserRouter, Routes, Route ,Link
-} from "react-router-dom";
-import "./App.css";
-import { useState } from "react";
-import CreateDC from "./tabs/createDC";
-import CreateDCcafe from "./tabs/createDC_cafe";
-import CreateDCpopUp from "./tabs/createDC_popUp";
-import CreateDCculLife from "./tabs/createDC_culLife";
-
-import MyPage from "./tabs/myPage";
-import LikedDC from "./tabs/likedDC";
-import Welcome from "./tabs/index1";
-import  Result from "./tabs/index4";
-import DateCourseResult from "./tabs/index5";
-
-//import CreateDC from "./tabs/createDC.tsx";
-
+import logo from './logo.svg';
+import './App.css';
+import {useState} from 'react';
+/*eslint-diable*/
 function App() {
-  // let post = "강남 우동 맛집";
-  // let[글제목, 글제목함수]=useState(['남자 코트 추천','여자코트 추천','공용코트 추천']);
-  // let[따봉, 따봉함수]=useState(0);
+  let post='강남 우동 맛집';
+  let [글제목,글제목변경]=useState(['카자 코트 추천','가자코트','라이썬']);
+  let [좋아요,좋아요변경]=useState(0);
+
+  let [p,글변경]=useState('2월 17일 발행');
   return (
-    // <div className="App">
-    //   <div className="black-nav">
-    //     <h4>ReactBlog</h4>
-    //   </div>
-
-    // <button onClick={()=>{
-    //   let copy=[...글제목];
-    //   copy[0]='여자 코트 추천';
-    //   글제목함수(copy);
-    // }}
-    
-    // style={{cursor:'pointer',display:'flex',margin:'20px'}}>글수정</button>
-
-    //   <div className="list">   
-    //     <h4>{글제목[0]} 
-    //       <span style={{cursor:'pointer'}}onClick={()=>{따봉함수(따봉+1) }}>👍</span> {따봉}</h4>
-    //     <p>2월 17일 발행</p>
-
-    //   </div>
-    //   <div className="list">   
-    //     <h4>{글제목[1]}</h4>
-    //     <p>2월 17일 발행</p>
-
-    //   </div>
-    //   <div className="list">   
-    //     <h4>{글제목[2]}</h4>
-    //     <p>2월 17일 발행</p>
-
-    //   </div>
-    // <Modal></Modal>
-    // </div>
     <div className="App">
-      <nav>
-      <Link to="/createDC">createDC</Link> | <Link to="/myPage">마이페이지</Link>| <Link to="/likedDC">찜한 데이트코스</Link>
-      | <Link to="/index1">찜한 데이트코스</Link>
-      | <Link to="/index4">결과</Link>
-      | <Link to="/index5">데이트코스결과</Link>
-      
 
-      </nav>
-      <Routes>
-        <Route path='/createDC'element={<CreateDC/>}/>
-        <Route path='/createDC_cafe'element={<CreateDCcafe/>}/>
-        <Route path='/createDC_popUp'element={<CreateDCpopUp/>}/>
-        <Route path='/createDC_culLife'element={<CreateDCculLife/>}/>
+     <div></div>
+     {/* <button onClick={()=>{글제목변경(['여자코트추천','강남우동맛집','파이썬 독학'])}}>글수정</button> */}
+     <button onClick={()=>{
+      let copy=[...글제목];
+      copy=copy.sort();
+      글제목변경(copy);
 
-        <Route path='/myPage'element={<MyPage/>}/>
-        <Route path='/likedDC'element={<LikedDC/>}/>
-        <Route path='/index1'element={<Welcome/>}/>
-        <Route path='/index4'element={<Result/>}/>
-        <Route path='/index5'element={<DateCourseResult/>}/>
-      </Routes>
+     }}>가나다정렬</button>
+      <h4>블로그임</h4>  
+      <div className="list">
+        <p>{p}</p>
+        <h4>{글제목[0]} <span onClick={()=>{글변경('여자코트추천')}}>좋아요</span>{좋아요}</h4>
+        <p>글제목</p>
+      </div>
+      <div className="list">
+        <h4>{글제목[1]}</h4>
+        <p>2월 15일 발행</p>
+      </div>
+      <div className="list">
+        <h4>{글제목[2]}</h4>
+        <p>2월 17일 발행</p>
+      </div>
+
+
+      <Modal></Modal>
+      <Modal></Modal>
+
     </div>
   );
 }
-
-// function Modal(){
-//   return(
-//     <div className="modal">
-//         <h4>제목</h4>
-//         <p>날짜</p>
-//         <p>상세내용</p>
-//         <p>더 상세</p>
-//       </div>
-//   )
-// }
+function Modal(){
+  return(
+    <div className='modal'>
+      <h4>제목</h4>
+      <p>날짜</p>
+      <p>상세내용</p>
+    </div>
+  )
+}
 
 export default App;
