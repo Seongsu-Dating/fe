@@ -67,26 +67,24 @@ export default function MyPage() {
             </div>
            
           </div>
-          <div>
 
-         
+
+          <div>
             <div
               style={{
-              display: "flex",
+              display: "none",
               //justifyContent: "",
               flexDirection:"column",
-            
               marginTop: "10px",
               //verticalAlign: "middle",
               width:"auto",
               height:"650px",
-              border:"1px #F7F7F7",
+              border:"1px solid gray",
               marginLeft:'440px',
               marginRight:'280px',
               borderRadius:'40px',
               boxShadow:'1px 4px 4px #00000040',
               paddingLeft:"40px"
-      
              }}
             >
              <p

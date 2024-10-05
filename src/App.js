@@ -60,7 +60,7 @@ function App() {
       | <Link to="/myPage">마이페이지</Link>
       | <Link to="/likedDC">찜한 데이트코스</Link>
       | <Link to="/index1">찜한 데이트코스</Link>
-      | <Link to="/index4">결과</Link>
+      | <Link to="/index4"></Link>
       | <Link to="/index5">데이트코스결과</Link>
       | <Link to="/course_result1">데이트코스결과1</Link>
       | <Link to="/course_result2">데이트코스결과2</Link>
