@@ -2,18 +2,18 @@ import { BrowserRouter, Routes, Route ,Link
 } from "react-router-dom";
 import "./App.css";
 import { useState } from "react";
-import CreateDC from "./tab/createDC";
-import CreateDCcafe from "./tab/createDC_cafe";
-import CreateDCpopUp from "./tab/createDC_popUp";
-import CreateDCculLife from "./tab/createDC_culLife";
+import CreateDC from "./tabs/createDC";
+import CreateDCcafe from "./tabs/createDC_cafe";
+import CreateDCpopUp from "./tabs/createDC_popUp";
+import CreateDCculLife from "./tabs/createDC_culLife";
 
-import MyPage from "./tab/myPage";
-import LikedDC from "./tab/likedDC";
-import Result2 from "./tab/course_result2";
-import Result3 from "./tab/course_result3";
-import Result1 from "./tab/course_result1";
-import Main from "./tab/main";
-import Welcome from "./tab/welcome";
+import MyPage from "./tabs/myPage";
+import LikedDC from "./tabs/likedDC";
+import Result2 from "./tabs/course_result2";
+import Result3 from "./tabs/course_result3";
+import Result1 from "./tabs/course_result1";
+import Main from "./tabs/main";
+import Welcome from "./tabs/welcome";
 
 //import CreateDC from "./tab/createDC.tsx";
 
