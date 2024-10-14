@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import "../App.css";
 import { useNavigate } from "react-router-dom";
+import "../App.css";
 
-// public/assets/images에서 직접 경로를 설정
-const homeImage = "/assets/images/home.svg";
-const heartImage = "/assets/images/heart.svg";
-const profileImage = "/assets/images/profile.svg";
+// 이미지 경로 설정
 const searchImage = "/assets/images/search.svg";
 
 const Main = () => {
   const navigate = useNavigate();
   const [selectedCategories, setSelectedCategories] = useState(new Set());
   const [selectedSubcategories, setSelectedSubcategories] = useState({});
+  const [clickedButtons, setClickedButtons] = useState(new Set());
 
+  // 카테고리 클릭 처리
   const handleCategoryClick = (category) => {
     setSelectedCategories((prev) => {
       const newSelection = new Set(prev);
@@ -23,37 +22,43 @@ const Main = () => {
       }
       return newSelection;
     });
+
+    setClickedButtons((prev) => {
+      const newClicked = new Set(prev);
+      if (newClicked.has(category)) {
+        newClicked.delete(category);
+      } else {
+        newClicked.add(category);
+      }
+      return newClicked;
+    });
   };
 
+  // 세부 카테고리 클릭 처리
   const handleSubcategoryClick = (subcategory, category) => {
+    const isMultipleSelectAllowed = ["문화생활", "편하게힐링"].includes(category);
+
+
     setSelectedSubcategories((prev) => {
       const currentSubcategories = prev[category] || [];
 
-      if (category === "문화생활" || category === "편하게힐링") {
-        const isSelected = currentSubcategories.includes(subcategory);
-        if (isSelected) {
-          // 이미 선택된 경우 삭제
-          return {
-            ...prev,
-            [category]: currentSubcategories.filter((item) => item !== subcategory),
-          };
+      if (!isMultipleSelectAllowed) {
+        if (currentSubcategories.includes(subcategory)) {
+          return { ...prev, [category]: [] }; // 선택된 카테고리를 제거
         } else {
-          // 선택되지 않은 경우 추가
-          return {
-            ...prev,
-            [category]: [...currentSubcategories, subcategory],
-          };
+          return { ...prev, [category]: [subcategory] }; // 선택한 서브 카테고리로 대체
         }
       } else {
-        // 그 외 카테고리는 단일 선택
-        return {
-          ...prev,
-          [category]: [subcategory],
-        };
+        if (currentSubcategories.includes(subcategory)) {
+          return { ...prev, [category]: currentSubcategories.filter((item) => item !== subcategory) };
+        } else {
+          return { ...prev, [category]: [...currentSubcategories, subcategory] };
+        }
       }
     });
   };
 
+  // 세부 카테고리 렌더링
   const renderSubcategories = (category) => {
     const subcategories = {
       밥: ["한식", "중식", "일식", "양식"],
@@ -65,17 +70,19 @@ const Main = () => {
     if (!subcategories[category]) return null;
 
     return (
-      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "start", marginBottom: "8px", gap: "8px" }}>
+      <div style={{ marginBottom: '40px' }}>
         {subcategories[category].map((subcategory, index) => (
           <button
             key={index}
             style={{
-              fontSize: "12px",
-              fontWeight: "bold",
-              padding: "4px 8px",
-              borderRadius: "9999px",
-              border: `1px solid ${(selectedSubcategories[category] || []).includes(subcategory) ? "#FF7074" : "#E5E7EB"}`,
-              color: (selectedSubcategories[category] || []).includes(subcategory) ? "#FF7074" : "#000000",
+              margin: '10px',
+              padding: '18px 30px',  // 버튼 크기 증가
+              borderRadius: '9999px',
+              border: '1px solid #ccc',
+              backgroundColor: selectedSubcategories[category]?.includes(subcategory) ? '#ff7074' : '#fff',
+              color: selectedSubcategories[category]?.includes(subcategory) ? '#fff' : '#333',
+              fontSize: '24px',  // 서브 카테고리 버튼 폰트 크기 크게 설정
+              cursor: 'pointer',
             }}
             onClick={() => handleSubcategoryClick(subcategory, category)}
           >
@@ -86,34 +93,80 @@ const Main = () => {
     );
   };
 
+  const handleCreateCourse = () => {
+    const selectedCategoriesArray = Array.from(selectedCategories);
+    if (selectedCategoriesArray.length === 0) {
+      alert("선택한 장소가 없습니다.");
+      return;
+    }
+
+    const firstCategory = selectedCategoriesArray[0];
+    if (firstCategory === '밥') {
+      navigate(`/createDC/${selectedSubcategories['밥']}`);
+    } else if (firstCategory === '카페') {
+      navigate("/createDC_cafe");
+    } else if (firstCategory === '팝업') {
+      navigate("/createDC_popUp");
+    } else if (firstCategory === '문화생활') {
+      navigate("/createDC_culLife");
+    }
+  };
+
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", backgroundColor: "#F3F4F6" }}>
-      <div style={{ maxWidth: "320px", width: "100%", backgroundColor: "#FFFFFF", padding: "20px", borderRadius: "1.5rem", position: "relative" }}>
-        <header style={{ display: "flex", flexDirection: "column", alignItems: "start", marginBottom: "20px", width: "100%", position: "relative" }}>
-          <h1 style={{ color: "#FF7074", fontWeight: "bold", fontSize: "24px", marginBottom: "8px" }}>데이트코스 생성</h1>
-          <p style={{ color: "#4B5563", fontSize: "12px" }}>신개념 AI추천 데이트코스 메이커, 성수데이팅</p>
-          <div style={{ position: "absolute", top: "0", right: "0" }}>
-            <img src={searchImage} alt="Search" style={{ width: "24px", height: "24px" }} />
-          </div>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',  // 화면을 꽉 채우도록 minHeight 설정
+      backgroundColor: '#f0f4f8',
+      margin: '0',
+      padding: '20px',
+    }}>
+      <div style={{
+        width: '100%',
+        backgroundColor: '#fff',
+        padding: '60px 80px', // padding을 설정해 내부 공간 조정
+        boxShadow: 'none',
+        textAlign: 'center',
+      }}>
+        <header style={{ marginBottom: '50px', position: 'relative' }}>
+          <h1 style={{ fontSize: '64px', fontWeight: 'bold', color: '#ff7074' }}>데이트코스 생성</h1>
+          <p style={{ fontSize: '30px', color: '#6b7280' }}>신개념 AI 추천 데이트코스 메이커, 성수데이팅</p>
+          <img src={searchImage} alt="Search" style={{
+            width: '50px',
+            height: '50px',
+            position: 'absolute',
+            top: '0',
+            right: '0',
+            cursor: 'pointer',
+          }} />
         </header>
-        <div style={{ color: "#000000", fontWeight: "bold", marginBottom: "12px", textAlign: "left", fontSize: "14px" }}>
-          어떤 데이트를 하고 싶은지 골라보세요
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", width: "100%", padding: "20px", backgroundColor: "#FFFFFF", borderRadius: "1.5rem" }}>
+        <div style={{ fontSize: '48px', fontWeight: 'bold', marginBottom: '60px' }}>뭐 먹으러 가지?</div>
+        <div>
           {["밥", "카페", "팝업", "문화생활", "편하게힐링"].map((category) => (
-            <div key={category}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                <span style={{ color: "#000000", fontSize: "14px", fontWeight: "bold" }}>{category}</span>
+            <div key={category} style={{ marginBottom: '40px' }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '30px',
+                fontSize: '30px',
+                fontWeight: 'bold',
+                color: '#111827',
+              }}>
+                <span>{category}</span>
                 <button
                   style={{
-                    fontWeight: "bold",
-                    color: "#FFFFFF",
-                    border: "none",
-                    padding: "4px 8px",
-                    borderRadius: "9999px",
-                    fontSize: "12px",
-                    minWidth: "80px",
-                    backgroundColor: selectedCategories.has(category) ? "#DCBFC0" : "#FF7074",
+                    fontSize: '24px',
+                    padding: '24px 80px',
+                    borderRadius: '9999px',
+                    border: 'none',
+                    backgroundColor: clickedButtons.has(category) ? '#DCBFC0' : '#FF7074',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    width: '240px',
                   }}
                   onClick={() => handleCategoryClick(category)}
                 >
@@ -122,41 +175,30 @@ const Main = () => {
               </div>
               {selectedCategories.has(category) && renderSubcategories(category)}
               {(category === "문화생활" || category === "편하게힐링") && (
-                <div style={{ fontSize: "12px", color: "#6B7280", marginBottom: "8px" }}>*복수선택가능</div>
+                <div style={{ fontSize: '20px', color: '#6b7280', marginTop: '16px', textAlign: 'left' }}>
+                  *복수선택가능
+                </div>
               )}
             </div>
           ))}
         </div>
-        <button
-          style={{
-            backgroundColor: "#FF7074",
-            color: "#FFFFFF",
-            fontWeight: "bold",
-            border: "none",
-            padding: "10px 56px",
-            borderRadius: "9999px",
-            marginTop: "32px",
-            marginBottom: "48px",
-            display: "block",
-            marginLeft: "auto",
-            marginRight: "auto",
-            fontSize: "12px",
-          }}
-          onClick={() => navigate("/createDC")}
-        >
-          데이트 코스 만들기
-        </button>
-        <footer style={{ display: "flex", justifyContent: "space-between", width: "100%", position: "absolute", bottom: "20px", paddingLeft: "20px", paddingRight: "20px", left: "50%", transform: "translateX(-50%)" }}>
-          <div style={{ width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <img src={homeImage} alt="Home" style={{ width: "100%", height: "100%" }} />
-          </div>
-          <div style={{ width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <img src={heartImage} alt="Heart" style={{ width: "100%", height: "100%" }} />
-          </div>
-          <div style={{ width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <img src={profileImage} alt="Profile" style={{ width: "100%", height: "100%" }} />
-          </div>
-        </footer>
+        <div style={{ marginTop: '80px' }}> {/* 데이트코스 생성 버튼 위쪽 간격 조정 */}
+          <button
+            style={{
+              fontSize: '30px',
+              padding: '24px 140px',
+              backgroundColor: '#ff7074',
+              color: '#fff',
+              borderRadius: '9999px',
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+            }}
+            onClick={handleCreateCourse}
+          >
+            데이트 코스 만들기
+          </button>
+        </div>
       </div>
     </div>
   );

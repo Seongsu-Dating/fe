@@ -1,15 +1,47 @@
 import React, { useState } from "react";
 import "../App.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
+const category_test = [
+  {
+     category: "음식",
+     subCategory: "양식",
+  },
+  {
+     category: "카페",
+     subCategory: "디저트"
+  },
+  {
+     category: "팝업"
+  },
+  {
+     category: "문화생활",
+     subCategory: ["영화", "재즈바", "미술관"]
+  }
+]
 
 export default function CreateDC() {
   const navigate = useNavigate();
   // 각 smallBox의 hover 상태와 클릭 상태를 관리하기 위한 state
   const [hoveredBoxIndex, setHoveredBoxIndex] = useState(null);
   const [clickedBoxIndex, setClickedBoxIndex] = useState(null);
+  // const [foodPic, setFoodPic] = useState("");
 
-  const bigBox='일식';
-  const foodPic='Japanese';
+  const { category } = useParams();
+
+  const bigBox = category;
+  let foodPic = '';
+
+  if(bigBox === '일식') {
+    foodPic = 'Japanese';
+  } else if (bigBox === "중식") {
+    foodPic = 'Chinese';
+  } else if (bigBox === "양식") {
+    foodPic = "Western";
+  } else {
+    foodPic = "Korean";
+  }
+  // const foodPic='Japanese';
   
   // smallBox 배열
   const smallBoxes = [
