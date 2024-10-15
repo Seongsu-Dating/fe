@@ -14,7 +14,7 @@ export default function MyPage() {
       padding: '0',
       backgroundColor: 'rgb(255, 206, 234)'}}>
       <img src="../img/back.png"style={{display:'flex',marginBottom:'25px',marginLeft:'20px',height:'50px',cursor:'pointer',paddingTop:'20px'}} className="backBtn" alt="Back Button" />
-      <div className="background_white"style={{backgroundColor:'rgba(240,248,255,0.869',borderTopRightRadius:'40px',borderTopLeftRadius:"40px"}}>
+      <div className="background_white"style={{backgroundColor:'rgba(240,248,255,0.869)',borderTopRightRadius:'40px',borderTopLeftRadius:"40px"}}>
 
 
         <div className="header"style={{  display: 'flex',

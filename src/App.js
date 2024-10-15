@@ -16,6 +16,7 @@ import Result2 from "./tabs/course_result2";
 import Result3 from "./tabs/course_result3";
 import Result1 from "./tabs/course_result1";
 
+
 //import CreateDC from "./tabs/createDC.tsx";
 
 function App() {
@@ -65,6 +66,7 @@ function App() {
       | <Link to="/course_result1">데이트코스결과1</Link>
       | <Link to="/course_result2">데이트코스결과2</Link>
       | <Link to="/course_result3">데이트코스결과3</Link>
+
       
       
 
@@ -83,6 +85,7 @@ function App() {
         <Route path='/course_result2'element={<Result2/>}/>
         <Route path='/course_result3'element={<Result3/>}/>
         <Route path='/course_result1'element={<Result1/>}/>
+      
       </Routes>
     </div>
   );

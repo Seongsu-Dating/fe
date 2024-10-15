@@ -1,7 +1,7 @@
 import React from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
-export default function MyPage() {
+export default function Result1() {
   const navigate = useNavigate(); // Initialize useNavigate
 
   return (
@@ -14,7 +14,7 @@ export default function MyPage() {
       backgroundColor: 'rgb(255, 206, 234)'}}>
       <img src="../img/back.png"style={{display:'flex',marginBottom:'25px',marginLeft:'20px',height:'50px',cursor:'pointer',paddingTop:'20px'}} className="backBtn" alt="Back Button" />
       <img src="../img/doughnut.png"style={{height:'800px',marginLeft:'20px'}} className="doughnut" alt="Doughnut"/>
-      <div className="background_white"style={{backgroundColor:'rgba(240,248,255,0.869',borderTopRightRadius:'40px',borderTopLeftRadius:"40px"}}>
+      <div className="background_white"style={{backgroundColor:'rgba(240,248,255,0.869)',borderTopRightRadius:'40px',borderTopLeftRadius:"40px"}}>
 
 
         <div className="header"style={{  display: 'flex',
@@ -73,71 +73,6 @@ export default function MyPage() {
 
           </div>
 
-          <div className="selectDC"style={{marginTop:"10px"}}>
-            <div className="DC_title_bar"style={{  display: 'flex'}}>
-                <p className="DC_title"style={{  fontSize: '33px',
-                  color: 'rgb(115, 115, 115)',marginLeft:'25%',
-                  fontWeight: 'bold', cursor: "pointer",
-                  }} onClick={() => navigate("/course_result2")}>데이트코스 자세히 보기
-                </p>
-            </div>
-   
-
-            
-          </div>
-          <div>
-            <div className="modal_name"
-              style={{
-              display: "none",
-              //justifyContent: "",
-              flexDirection:"column",
-              marginTop: "10px",
-              //verticalAlign: "middle",
-              width:"auto",
-              height:"650px",
-              border:"1px solid gray",
-              marginLeft:'440px',
-              marginRight:'280px',
-              borderRadius:'40px',
-              boxShadow:'1px 4px 4px #00000040',
-              paddingLeft:"40px"
-             }}
-            >
-             <p
-              style={{
-              margin:'0 auto',
-              fontSize:'50px',
-              fontWeight:'bolder',
-              color: 'rgba(255, 112, 116, 1)',
-             // paddingLeft:"40px",
-              marginTop:"50px",
-              marginLeft:"60px"
-             }}
-              >데이트코스명 설정</p>
-              <p
-              style={{
-              margin:'0 auto',
-              fontSize:'25px',
-              fontWeight:'bolder',
-              color: 'rgba(255, 112, 116, 1)',
-            // paddingLeft:"40px",
-              marginTop:"50px",
-              marginLeft:"60px"
-             }}
-              >원하는 데이트 코스명 입력</p> 
-              <form>
-                <input type='text' placeholder="예시: 7월 셋째주 데이트 " style={{width:"67%",height:"90px",marginTop:"50px", border:"1px solid #FF9B9B", borderRadius:'50px',boxShadow:'1px 4px 4px #00000040',fontSize:'23px',paddingLeft:'50px'}}></input>
-                <br></br>
-                <input type='image' src='../img/savaBtn.png' alt="save button" name="saveBtn" 
-                 style={{ width: "25%", height: "90px", marginLeft: "45%", marginTop:"170px",cursor: "pointer" }}></input>
-              </form>
-        
-            </div>
-          </div>
-
-
-
-          
 
         </main>
         <div style={{ display: "flex", justifyContent: "space-evenly",alignItems:"center", marginTop: "80px",marginLeft:'200px',paddingBottom:'80px' }}>
@@ -151,19 +86,20 @@ export default function MyPage() {
            />
         
           <img
-            src="../img/namingBtn.png"
-            alt="naming button"
+            src="../img/course_btn.png"
+            alt="course button"
             style={{ cursor: "pointer"}}
             //onClick={() => navigate("/course_result3")}
-            onClick={() => {
+            onClick={() => navigate("/course_result2")}
+            // onClick={() => {
              
-              const modals = document.getElementsByClassName('modal_name'); // 클래스 이름으로 요소들을 가져옴
-              const selectDC = document.getElementsByClassName('selectDC'); // 클래스 이름으로 요소들을 가져옴
-              if (modals.length > 0) {
-               selectDC[0].style.display = 'none'; // 첫 번째 modal의 display 속성을 none으로 변경
-               modals[0].style.display='flex';
-              }
-             }}
+            //   const modals = document.getElementsByClassName('modal_name'); // 클래스 이름으로 요소들을 가져옴
+            //   const selectDC = document.getElementsByClassName('selectDC'); // 클래스 이름으로 요소들을 가져옴
+            //   if (modals.length > 0) {
+            //    selectDC[0].style.display = 'none'; // 첫 번째 modal의 display 속성을 none으로 변경
+            //    modals[0].style.display='flex';
+            //   }
+            //  }}
             width="400px"
             height="90px"
           />
