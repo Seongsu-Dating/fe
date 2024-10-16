@@ -15,6 +15,12 @@ import LikedDC from "./tabs/likedDC";
 import Result2 from "./tabs/course_result2";
 import Result1 from "./tabs/course_result1";
 
+<<<<<<< HEAD
+=======
+
+//import CreateDC from "./tabs/createDC.tsx";
+
+>>>>>>> 02865ecc2c27661f39e7b1b13a0611ad2cb935b2
 function App() {
   return (
 
@@ -25,8 +31,21 @@ function App() {
       |<Link to="/createDC">createDC</Link>
       | <Link to="/myPage">마이페이지</Link>
       | <Link to="/likedDC">찜한 데이트코스</Link>
+<<<<<<< HEAD
       | <Link to="/course_result1">데이트코스결과1</Link>
       | <Link to="/course_result2">데이트코스결과2</Link>
+=======
+      | <Link to="/index1">찜한 데이트코스</Link>
+      | <Link to="/index4"></Link>
+      | <Link to="/index5">데이트코스결과</Link>
+      | <Link to="/course_result1">데이트코스결과1</Link>
+      | <Link to="/course_result2">데이트코스결과2</Link>
+      | <Link to="/course_result3">데이트코스결과3</Link>
+
+      
+      
+
+>>>>>>> 02865ecc2c27661f39e7b1b13a0611ad2cb935b2
       </nav>
       <Routes>
       <Route path='/welcome'element={<Welcome/>}/>
@@ -39,6 +58,7 @@ function App() {
         <Route path='/likedDC'element={<LikedDC/>}/>
         <Route path='/course_result2'element={<Result2/>}/>
         <Route path='/course_result1'element={<Result1/>}/>
+      
       </Routes>
     </div>
   );

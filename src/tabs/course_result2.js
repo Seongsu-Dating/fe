@@ -201,7 +201,11 @@ export default function Resutlt2() {
              }}
             >
              <img 
+<<<<<<< HEAD
               src="../../img/exit.png"
+=======
+              src="../img/exit.png"
+>>>>>>> 02865ecc2c27661f39e7b1b13a0611ad2cb935b2
               alt="exit button"
               style={{ cursor: "pointer",marginLeft:"600px",marginTop:"30px" }}
               onClick={() => {
