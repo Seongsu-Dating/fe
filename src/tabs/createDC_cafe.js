@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateDCcafe() {
+  const [smallBoxes, setSmallBoxes] = useState([]); // 상태 선언
   const navigate = useNavigate();
   const [hoveredBoxIndex, setHoveredBoxIndex] = useState(null);
   const [clickedBoxIndex, setClickedBoxIndex] = useState(null);
@@ -10,13 +11,25 @@ export default function CreateDCcafe() {
   const bigBox = "카페";
   const foodPic = "doughnut";
 
-  const smallBoxes = [
-    { title: "난포", hours: "영업시간", time: "10:00~20:00", phone: "전화번호", num: "010-7788-0099" },
-    { title: "난포", hours: "영업시간", time: "10:00~20:00", phone: "전화번호", num: "010-7788-0099" },
-    { title: "난포", hours: "영업시간", time: "10:00~20:00", phone: "전화번호", num: "010-7788-0099" },
-    { title: "난포", hours: "영업시간", time: "10:00~20:00", phone: "전화번호", num: "010-7788-0099" },
-    { title: "난포", hours: "영업시간", time: "10:00~20:00", phone: "전화번호", num: "010-7788-0099" },
-  ];
+  useEffect(() => {
+    // API 호출
+    fetch('http://15.165.28.79:3000/place/dessert_cafe')
+      .then((response) => response.json())
+      .then((data) => {
+        // 받아온 데이터를 상태에 저장
+        if (data.result) {
+          const formattedBoxes = data.result.map((item) => ({
+            title: item.name,
+            hours: "영업시간",
+            time: item.hour || "정보 없음", // 영업시간이 없을 경우 처리
+            phone: "전화번호",
+            num: item.phone_number || "정보 없음", // 전화번호가 없을 경우 처리
+          }));
+          setSmallBoxes(formattedBoxes); // 상태 업데이트
+        }
+      })
+      .catch((error) => console.error("API 호출 에러:", error));
+  }, []); // 컴포넌트 마운트 시 한 번만 실행
 
   return (
     <div
@@ -75,13 +88,13 @@ export default function CreateDCcafe() {
       </div>
 
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <div style={{ width: "400px", height: "650px" }}>
+        <div style={{ width: "700px", height: "650px" }}>
           <div
             id="bigBox"
             style={{
               cursor: "pointer",
-              width: "330px",
-              height: "780px",
+              width: "460px",
+              height: "1000px",
               borderRadius: "20px",
               backgroundColor: "rgba(250, 216, 248, 1)",
               display: "flex",
@@ -99,13 +112,13 @@ export default function CreateDCcafe() {
             <img
               src={`../img/${foodPic}.png`}
               alt="Cafe"
-              style={{ width: "435px", height: "260px", zIndex: 10, position: "relative", paddingLeft: "10px" }}
-            />
-            <div style={{ marginTop: "80px", marginLeft: "20px", marginRight: "20px" }}>
-              <h1>{bigBox}</h1>
-              <p style={{ color: "rgba(0, 0, 0, 0.41)", fontSize: "20PX", fontWeight: "bolder" }}>
-                서울숲 근처의 BEST {bigBox} 맛집 추천
-              </p>
+              style={{ width: "555px", zIndex: 10, position: "relative"}}
+              />
+              <div style={{ marginTop: "80px", marginLeft: "20px", marginRight: "20px" }}>
+                <h1 style={{fontSize:'40px'}}>{bigBox}</h1>
+                <p style={{ color:"rgba(0, 0, 0, 0.41)", fontSize:"25PX", fontWeight:"bolder" }}>
+                  서울숲 근처의 BEST {bigBox} 맛집 추천
+                </p>
             </div>
           </div>
         </div>
@@ -117,8 +130,8 @@ export default function CreateDCcafe() {
               id="smallBox"
               style={{
                 cursor: "pointer",
-                width: "245px",
-                height: "130px",
+                width: "500px",
+                height: "180px",
                 marginTop: "30PX",
                 borderRadius: "20px",
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
@@ -135,13 +148,13 @@ export default function CreateDCcafe() {
               onMouseLeave={() => setHoveredBoxIndex(null)}
               onClick={() => setClickedBoxIndex(index)}
             >
-              <p style={{ paddingTop: "20px", paddingLeft: "20px", margin: "0", marginBottom: "10PX", fontWeight: "bolder", fontSize: "24px" }}>
+                  <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10PX", fontWeight: "bolder", fontSize: "28px" }}>
                 {box.title}
               </p>
-              <p style={{ paddingLeft: "20px", margin: 0, color: "rgba(0, 0, 0, 0.41)" }}>
+              <p style={{paddingTop:"25px",paddingLeft: "20px", margin: 0 ,color:"rgba(0, 0, 0, 0.41)",fontSize:"21px" }}>
                 {box.hours} {box.time}
               </p>
-              <p style={{ paddingLeft: "20px", margin: 0, color: "rgba(0, 0, 0, 0.41)" }}>
+              <p style={{ paddingTop:"10px",paddingLeft: "20px", margin: 0 ,color:"rgba(0, 0, 0, 0.41)" ,fontSize:"21px"}}>
                 {box.phone} {box.num}
               </p>
             </div>
@@ -154,13 +167,13 @@ export default function CreateDCcafe() {
     src="../img/backBtn.png"
     alt="back button"
     style={{ width: "210px", height: "90px", cursor: "pointer"}}
-    onClick={() => navigate("/createDC")}
+    onClick={() => navigate("/createDC") }
   />
         <img
           src="../img/nextBtn.png"
           alt="next button"
           style={{ width: "210px", height: "90px",marginLeft:"150PX",cursor: "pointer" }}
-          onClick={() => navigate("/createDC_PopUp")}
+          onClick={() => navigate("/createDC_PopUp") }
         />
       </div>
 

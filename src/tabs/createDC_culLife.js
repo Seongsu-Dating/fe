@@ -3,6 +3,10 @@ import "../App.css";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateDCculLife() {
+
+  fetch('http://15.165.28.79:3000/place/popup')
+  .then((response)=>response.json())
+  .then((data)=>console.log(data));
   const navigate = useNavigate();
   const [hoveredBoxIndex, setHoveredBoxIndex] = useState(null);
   const [clickedBoxIndex, setClickedBoxIndex] = useState(null);
@@ -75,13 +79,13 @@ export default function CreateDCculLife() {
       </div>
 
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <div style={{ width: "400px", height: "650px" }}>
+        <div style={{ width: "700px", height: "650px" }}>
           <div
             id="bigBox"
             style={{
               cursor: "pointer",
-              width: "330px",
-              height: "780px",
+              width: "460px",
+              height: "1000px",
               borderRadius: "20px",
               backgroundColor: "rgba(240, 254, 216, 1)",
               display: "flex",
@@ -123,8 +127,8 @@ export default function CreateDCculLife() {
               id="smallBox"
               style={{
                 cursor: "pointer",
-                width: "245px",
-                height: "130px",
+                width: "500px",
+                height: "180px",
                 marginTop: "30px",
                 borderRadius: "20px",
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
@@ -141,22 +145,13 @@ export default function CreateDCculLife() {
               onMouseLeave={() => setHoveredBoxIndex(null)}
               onClick={() => setClickedBoxIndex(index)} // 클릭 이벤트
             >
-              <p
-                style={{
-                  paddingTop: "20px",
-                  paddingLeft: "20px",
-                  margin: "0",
-                  marginBottom: "10px",
-                  fontWeight: "bolder",
-                  fontSize: "24px",
-                }}
-              >
+             <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10PX", fontWeight: "bolder", fontSize: "28px" }}>
                 {box.title}
               </p>
-              <p style={{ paddingLeft: "20px", margin: 0, color: "rgba(0, 0, 0, 0.41)" }}>
+              <p style={{paddingTop:"25px",paddingLeft: "20px", margin: 0 ,color:"rgba(0, 0, 0, 0.41)",fontSize:"21px" }}>
                 {box.hours} {box.time}
               </p>
-              <p style={{ paddingLeft: "20px", margin: 0, color: "rgba(0, 0, 0, 0.41)" }}>
+              <p style={{ paddingTop:"10px",paddingLeft: "20px", margin: 0 ,color:"rgba(0, 0, 0, 0.41)" ,fontSize:"21px"}}>
                 {box.phone} {box.num}
               </p>
             </div>
@@ -174,7 +169,7 @@ export default function CreateDCculLife() {
         <button
           alt="next button"
           style={{ width: "210px", height: "90px", marginLeft: "50px", cursor: "pointer" ,border:"none",backgroundColor:'rgba(255, 112, 116, 1)',color:"rgba(255, 255, 255, 1)",fontSize:'24px',fontWeight:"550",borderRadius:"50px"}}
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/course_result1")}
         >생성 결과 보기</button>
       </div>
 

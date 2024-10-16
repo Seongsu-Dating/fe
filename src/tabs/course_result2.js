@@ -1,9 +1,14 @@
-import React from "react";
+//import React from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
-export default function MyPage() {
+import React, { useRef, useEffect } from 'react';
+
+
+
+export default function Resutlt2() {
   const navigate = useNavigate(); // Initialize useNavigate
 
+  
   return (
     <div style={
       {fontFamily:'arial',marginTop:'0',
@@ -13,7 +18,7 @@ export default function MyPage() {
       padding: '0',
       backgroundColor: 'rgb(255, 206, 234)'}}>
       <img src="../img/back.png"style={{display:'flex',marginBottom:'25px',marginLeft:'20px',height:'50px',cursor:'pointer',paddingTop:'20px'}} className="backBtn" alt="Back Button" />
-      <div className="background_white"style={{backgroundColor:'rgba(240,248,255,0.869',borderTopRightRadius:'40px',borderTopLeftRadius:"40px"}}>
+      <div className="background_white"style={{backgroundColor:'rgba(240,248,255,0.869)',borderTopRightRadius:'40px',borderTopLeftRadius:"40px"}}>
 
 
         <div className="header"style={{  display: 'flex',
@@ -72,7 +77,7 @@ export default function MyPage() {
 
           </div>
 
-          <div className="selectDC"style={{marginTop:"10px"}}>
+          <div className="datecourse"style={{marginTop:"10px"}}>
             <div className="DC_title_bar"style={{  display: 'flex'}}>
                 <p className="DC_title"style={{  fontSize: '33px',
                   color: 'rgb(115, 115, 115)',marginLeft:'25%',
@@ -174,6 +179,79 @@ export default function MyPage() {
             </div>
           </div>
 
+          <div className="modal_wrap">
+            <div className="modal_name"
+              style={{
+              display: "flex",
+              //justifyContent: "",
+              flexDirection:"column",
+              marginTop: "700px",
+              //verticalAlign: "middle",
+              width:"auto",
+              height:"750px",
+              border:"1px solid gray",
+              marginLeft:'500px',
+              borderRadius:'40px',
+              boxShadow:'1px 4px 4px #00000040',
+              paddingLeft:"70px",
+              paddingRight:"70px",
+              backgroundColor:'#FFFFFF'
+             
+
+             }}
+            >
+             <img 
+              src="../../img/exit.png"
+              alt="exit button"
+              style={{ cursor: "pointer",marginLeft:"600px",marginTop:"30px" }}
+              onClick={() => {
+             
+                const modals_wrap = document.getElementsByClassName('modal_wrap'); // 클래스 이름으로 요소들을 가져옴
+                //const course = document.getElementsByClassName('datecourse'); // 클래스 이름으로 요소들을 가져옴
+                
+                if (modals_wrap.length > 0) { // 요소가 존재하는지 확인
+                 modals_wrap[0].style.display = 'none'; // 첫 번째 modal의 display 속성을 flex로 변경
+               } 
+                         
+               }}
+               width="40px"
+               height="40px"
+               paddingTop="15px"
+              // marginLeft="600px"
+             />
+             <p
+              style={{
+              margin:'0 auto',
+              fontSize:'50px',
+              fontWeight:'bolder',
+              color: 'rgba(255, 112, 116, 1)',
+              paddingTop:"20px",
+              marginTop:"30px",
+              //marginLeft:"60px"
+             }}
+              >데이트코스명 설정</p>
+              <p
+              style={{
+              margin:'0 auto',
+              fontSize:'25px',
+              fontWeight:'bolder',
+              color: 'rgba(255, 112, 116, 1)',
+            // paddingLeft:"40px",
+              marginTop:"30px",
+              marginLeft:"120px"
+             }}
+              >원하는 데이트 코스명 입력</p> 
+              <form>
+                <input type='text' placeholder="예시: 7월 셋째주 데이트 " style={{width:"400px",height:"90px",marginTop:"50px", border:"1px solid #FF9B9B", borderRadius:'50px',boxShadow:'1px 4px 4px #00000040',fontSize:'23px',paddingLeft:'50px'}}></input>
+                <br></br>
+                <input type='image' src='../img/savaBtn.png' alt="save button" name="saveBtn" 
+                 style={{ width: "170px", height: "70px", marginLeft: "270px", marginTop:"200px",cursor: "pointer" }}></input>
+              </form>
+        
+            </div>
+            
+          </div>
+
 
           
 
@@ -192,12 +270,33 @@ export default function MyPage() {
             src="../img/namingBtn.png"
             alt="naming button"
             style={{ cursor: "pointer"}}
-            onClick={() => navigate("/course_result3")}
+          //  onClick={() => navigate("/course_result3")}
+
+      
+            onClick={() => {
+             
+             //const modals = document.getElementsByClassName('modal_name');
+             const modals_wrap = document.getElementsByClassName('modal_wrap'); // 클래스 이름으로 요소들을 가져옴
+             //const course = document.getElementsByClassName('datecourse'); // 클래스 이름으로 요소들을 가져옴
+             
+             if (modals_wrap.length > 0) { // 요소가 존재하는지 확인
+              modals_wrap[0].style.display = 'flex'; // 첫 번째 modal의 display 속성을 flex로 변경
+            } 
+              
+             
+            }}
             width="400px"
             height="90px"
           />
+          
+
         </div>
+        
+            
+    
       </div>
+      
+    
     </div>
   );
 }

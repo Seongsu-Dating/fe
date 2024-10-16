@@ -1,7 +1,7 @@
 import React from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
-export default function MyPage() {
+export default function Result1() {
   const navigate = useNavigate(); // Initialize useNavigate
 
   return (
@@ -14,7 +14,7 @@ export default function MyPage() {
       backgroundColor: 'rgb(255, 206, 234)'}}>
       <img src="../img/back.png"style={{display:'flex',marginBottom:'25px',marginLeft:'20px',height:'50px',cursor:'pointer',paddingTop:'20px'}} className="backBtn" alt="Back Button" />
       <img src="../img/doughnut.png"style={{height:'800px',marginLeft:'20px'}} className="doughnut" alt="Doughnut"/>
-      <div className="background_white"style={{backgroundColor:'rgba(240,248,255,0.869',borderTopRightRadius:'40px',borderTopLeftRadius:"40px"}}>
+      <div className="background_white"style={{backgroundColor:'rgba(240,248,255,0.869)',borderTopRightRadius:'40px',borderTopLeftRadius:"40px"}}>
 
 
         <div className="header"style={{  display: 'flex',
@@ -73,21 +73,6 @@ export default function MyPage() {
 
           </div>
 
-          <div className="selectDC"style={{marginTop:"10px"}}>
-            <div className="DC_title_bar"style={{  display: 'flex'}}>
-                <p className="DC_title"style={{  fontSize: '33px',
-                  color: 'rgb(115, 115, 115)',marginLeft:'25%',
-                  fontWeight: 'bold', cursor: "pointer",
-                  }} onClick={() => navigate("/course_result2")}>데이트코스 자세히 보기
-                </p>
-            </div>
-   
-
-            
-          </div>
-
-
-          
 
         </main>
         <div style={{ display: "flex", justifyContent: "space-evenly",alignItems:"center", marginTop: "80px",marginLeft:'200px',paddingBottom:'80px' }}>
@@ -101,10 +86,20 @@ export default function MyPage() {
            />
         
           <img
-            src="../img/namingBtn.png"
-            alt="naming button"
+            src="../img/course_btn.png"
+            alt="course button"
             style={{ cursor: "pointer"}}
-            onClick={() => navigate("/course_result3")}
+            //onClick={() => navigate("/course_result3")}
+            onClick={() => navigate("/course_result2")}
+            // onClick={() => {
+             
+            //   const modals = document.getElementsByClassName('modal_name'); // 클래스 이름으로 요소들을 가져옴
+            //   const selectDC = document.getElementsByClassName('selectDC'); // 클래스 이름으로 요소들을 가져옴
+            //   if (modals.length > 0) {
+            //    selectDC[0].style.display = 'none'; // 첫 번째 modal의 display 속성을 none으로 변경
+            //    modals[0].style.display='flex';
+            //   }
+            //  }}
             width="400px"
             height="90px"
           />

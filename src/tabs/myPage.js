@@ -1,8 +1,17 @@
 import React from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 export default function MyPage() {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
+  // Initialize useNavigate
+  const [likedCourses, setLikedCourses] = useState([]);
+
+  const handleLikeClick = (courseName) => {
+    setLikedCourses((prevCourses) => [...prevCourses, courseName]); // 새로운 데이트 코스를 배열에 추가
+    navigate("/likedDC", { state: { likedCourses: [...likedCourses, courseName] } }); // likedDC로 데이터 전달
+  };
 
   return (
     <div style={{fontFamily:'arial',marginTop:'0',
@@ -90,17 +99,17 @@ export default function MyPage() {
   color: 'rgb(115, 115, 115)',marginLeft:'155px',
   fontWeight: 'bold'}}>데이트코스명</p>
                 <img
-                  src="../img/heart.png"
+                  src="../img/unliked.png"
                   className="heart"style={{  height: '60px',
                     width: '60px',
                     marginTop: '6px',
                     marginLeft: '10px',
-                    backgroundColor: 'rgb(255, 255, 255)',
                     padding: '17px',
                     borderRadius: '35px',
                     cursor: 'pointer',
-                    boxShadow:"0 2px 4px rgba(0, 0, 0, 0.1)"}}
+                    }}
                   alt="Heart Icon"
+                  onClick={()=>handleLikeClick("데이트코스명 1")}
                 />
               </div>
               <div className="DC_shareTab"style={{  display: 'flex'}}>
@@ -191,7 +200,6 @@ export default function MyPage() {
 </div>
             </div>
           </div>
-
 
           <div className="savedDC"style={{marginTop:"50px"}}>
             <div className="DC_title_bar"style={{  display: 'flex',
@@ -201,17 +209,17 @@ export default function MyPage() {
   color: 'rgb(115, 115, 115)',marginLeft:'155px',
   fontWeight: 'bold'}}>데이트코스명</p>
                 <img
-                  src="../img/heart.png"
+                  src="../img/unliked.png"
                   className="heart"style={{  height: '60px',
                     width: '60px',
                     marginTop: '6px',
                     marginLeft: '10px',
-                    backgroundColor: 'rgb(255, 255, 255)',
                     padding: '17px',
                     borderRadius: '35px',
                     cursor: 'pointer',
-                    boxShadow:"0 2px 4px rgba(0, 0, 0, 0.1)"}}
+                    }}
                   alt="Heart Icon"
+                  onClick={()=>handleLikeClick("데이트코스명 1")}
                 />
               </div>
               <div className="DC_shareTab"style={{  display: 'flex'}}>
@@ -302,8 +310,6 @@ export default function MyPage() {
 </div>
             </div>
           </div>
-
-
         </main>
         <div style={{ display: "flex", justifyContent: "space-evenly", marginTop: "80px",marginLeft:'200px',paddingBottom:'80px' }}>
         <img
