@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
+import moveToNextCategory from "../utils/moveToNextCategory";
+import moveToPreviousCategory from "../utils/moveToPreviousCategory";
+import BottomButtom from "../components/BottomButton";
 
 export default function CreateDCpopUp() {
   const [smallBoxes, setSmallBoxes] = useState([]); // 팝업 데이터를 저장할 상태
@@ -9,7 +12,7 @@ export default function CreateDCpopUp() {
   const [clickedBoxIndex, setClickedBoxIndex] = useState(null);
 
   const bigBox = "팝업";
-  const foodPic = "popUp";
+  const popUpPic = "popUp";
 
   useEffect(() => {
     // 팝업 데이터를 API로부터 불러옴
@@ -110,7 +113,7 @@ export default function CreateDCpopUp() {
               style={{ width: "50px", margin: "20px" }}
             />
             <img
-              src={`../img/${foodPic}.png`}
+              src={`../img/popUp.png`}
               alt="Exhibition"
               style={{
                 width: "265px",
@@ -168,20 +171,7 @@ export default function CreateDCpopUp() {
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "100px" }}>
-        <img
-          src="../img/backBtn.png"
-          alt="back button"
-          style={{ width: "210px", height: "90px", cursor: "pointer", paddingRight: "110px" }}
-          onClick={() => navigate("/createDC_cafe")}
-        />
-        <img
-          src="../img/nextBtn.png"
-          alt="next button"
-          style={{ width: "210px", height: "90px", marginLeft: "50px", cursor: "pointer" }}
-          onClick={() => navigate("/createDC_culLife")}
-        />
-      </div>
+      <BottomButtom navigate={navigate}/>
 
       <div style={{ display: "flex", justifyContent: "center", marginTop: "40px", paddingBottom: "80px" }}>
         <img

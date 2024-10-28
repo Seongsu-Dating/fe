@@ -1,23 +1,32 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
+import moveToNextCategory from "../utils/moveToNextCategory";
+import moveToPreviousCategory from "../utils/moveToPreviousCategory";
+import BottomButtom from "../components/BottomButton";
 
 
 
 export default function CreateDC() {
-
-
   const [smallBoxes, setSmallBoxes] = useState([]); // 데이터를 저장할 상태
   const navigate = useNavigate();
   const [hoveredBoxIndex, setHoveredBoxIndex] = useState(null);
   const [clickedBoxIndex, setClickedBoxIndex] = useState(null);
-
-  const bigBox = '일식';
-  const foodPic = 'Japanese';
+  const [foodPic, setFoodPic] = useState("");
+  
+  const subCategory = JSON.parse(localStorage.getItem('subCategory')); 
+  const bigBox = subCategory["밥"][0]
+  useEffect(() => {
+    if (bigBox === "한식") setFoodPic("Korean")
+      else if (bigBox === "일식") setFoodPic("Japanese")
+      else if (bigBox === "중식") setFoodPic("Chinese") 
+      else if (bigBox === "양식") setFoodPic("Western")
+  }, []);
 
   useEffect(() => {
     // API 호출
-    fetch('http://15.165.28.79:3000/place/japanese')
+    if (foodPic){
+    fetch(`http://15.165.28.79:3000/place/${foodPic?.toLowerCase()}`)
       .then((response) => response.json())
       .then((data) => {
         // 받아온 데이터가 있으면 상태를 업데이트
@@ -33,7 +42,8 @@ export default function CreateDC() {
         }
       })
       .catch((error) => console.error("API 호출 에러:", error));
-  }, []); // 컴포넌트 마운트 시 한 번만 실행
+    }
+  }, [foodPic]); 
 
   return (
     <div
@@ -161,15 +171,9 @@ export default function CreateDC() {
           ))}
         </div>
       </div>
+      
 
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "50px" }}>
-        <img
-          src="../img/nextBtn.png"
-          alt="next button"
-          style={{ width: "270px", marginLeft: "700px", cursor: "pointer" }}
-          onClick={() => navigate("/createDC_cafe")}
-        />
-      </div>
+      <BottomButtom navigate={navigate}/>
 
       <div style={{ display: "flex", justifyContent: "center", marginTop: "80px", paddingBottom: "110px" }}>
         <img

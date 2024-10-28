@@ -1,35 +1,45 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
+import moveToNextCategory from "../utils/moveToNextCategory";
+import moveToPreviousCategory from "../utils/moveToPreviousCategory";
+import BottomButtom from "../components/BottomButton";
+
 
 export default function CreateDCcafe() {
   const [smallBoxes, setSmallBoxes] = useState([]); // 상태 선언
   const navigate = useNavigate();
   const [hoveredBoxIndex, setHoveredBoxIndex] = useState(null);
   const [clickedBoxIndex, setClickedBoxIndex] = useState(null);
-
-  const bigBox = "카페";
-  const foodPic = "doughnut";
+  const [cafePic, setCafePic] = useState("");
+  
+  const subCategory = JSON.parse(localStorage.getItem('subCategory')); 
+  const bigBox = subCategory["카페"][0]
+  useEffect(() => {
+    if (bigBox === "디저트") setCafePic('dessert')
+    else if (bigBox === "커피전문점") setCafePic('expert')
+  }, []);
 
   useEffect(() => {
     // API 호출
-    fetch('http://15.165.28.79:3000/place/dessert_cafe')
-      .then((response) => response.json())
-      .then((data) => {
-        // 받아온 데이터를 상태에 저장
-        if (data.result) {
-          const formattedBoxes = data.result.map((item) => ({
-            title: item.name,
-            hours: "영업시간",
-            time: item.hour || "정보 없음", // 영업시간이 없을 경우 처리
-            phone: "전화번호",
-            num: item.phone_number || "정보 없음", // 전화번호가 없을 경우 처리
-          }));
-          setSmallBoxes(formattedBoxes); // 상태 업데이트
-        }
-      })
-      .catch((error) => console.error("API 호출 에러:", error));
-  }, []); // 컴포넌트 마운트 시 한 번만 실행
+    if (cafePic)
+      fetch(`http://15.165.28.79:3000/place/${cafePic}_cafe`)
+        .then((response) => response.json())
+        .then((data) => {
+          // 받아온 데이터를 상태에 저장
+          if (data.result) {
+            const formattedBoxes = data.result.map((item) => ({
+              title: item.name,
+              hours: "영업시간",
+              time: item.hour || "정보 없음", // 영업시간이 없을 경우 처리
+              phone: "전화번호",
+              num: item.phone_number || "정보 없음", // 전화번호가 없을 경우 처리
+            }));
+            setSmallBoxes(formattedBoxes); // 상태 업데이트
+          }
+        })
+        .catch((error) => console.error("API 호출 에러:", error));
+  }, [cafePic]); // 컴포넌트 마운트 시 한 번만 실행
 
   return (
     <div
@@ -110,7 +120,7 @@ export default function CreateDCcafe() {
               style={{ width: "50px", margin: "20px" }}
             />
             <img
-              src={`../img/${foodPic}.png`}
+              src={`../img/doughnut.png`}
               alt="Cafe"
               style={{ width: "555px", zIndex: 10, position: "relative"}}
               />
@@ -162,21 +172,7 @@ export default function CreateDCcafe() {
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop:"100px"}}>
-  <img
-    src="../img/backBtn.png"
-    alt="back button"
-    style={{ width: "210px", height: "90px", cursor: "pointer"}}
-    onClick={() => navigate("/createDC") }
-  />
-        <img
-          src="../img/nextBtn.png"
-          alt="next button"
-          style={{ width: "210px", height: "90px",marginLeft:"150PX",cursor: "pointer" }}
-          onClick={() => navigate("/createDC_PopUp") }
-        />
-      </div>
-
+      <BottomButtom navigate={navigate}/>
       <div style={{ display: "flex", justifyContent: "center", marginTop: "40px", paddingBottom: "80px" }}>
         <img
           src="../img/FootHome.png"

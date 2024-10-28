@@ -174,7 +174,8 @@ export default function Resutlt2() {
             <div className="total_hour_bar"style={{  display: 'flex'}}>
                 <p className="total_hour"style={{  fontSize: '33px',
                   color: '#FF7074',marginLeft:'25%',
-                  fontWeight: 'bold'}}> => 총예상 시간은 2시간입니다.
+                  fontWeight: 'bold'}}> 
+                  => 총예상 시간은 2시간입니다.
                 </p>
             </div>
           </div>
@@ -201,11 +202,7 @@ export default function Resutlt2() {
              }}
             >
              <img 
-<<<<<<< HEAD
-              src="../../img/exit.png"
-=======
               src="../img/exit.png"
->>>>>>> 02865ecc2c27661f39e7b1b13a0611ad2cb935b2
               alt="exit button"
               style={{ cursor: "pointer",marginLeft:"600px",marginTop:"30px" }}
               onClick={() => {

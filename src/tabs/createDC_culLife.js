@@ -1,26 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
+import moveToNextCategory from "../utils/moveToNextCategory";
+import moveToPreviousCategory from "../utils/moveToPreviousCategory";
+import checkIsLastPage from "../utils/checkIsLastPage";
+import BottomButtom from "../components/BottomButton";
 
 export default function CreateDCculLife() {
-
-  fetch('http://15.165.28.79:3000/place/popup')
-  .then((response)=>response.json())
-  .then((data)=>console.log(data));
+  const [smallBoxes, setSmallBoxes] = useState([]); // 상태 선언
   const navigate = useNavigate();
   const [hoveredBoxIndex, setHoveredBoxIndex] = useState(null);
   const [clickedBoxIndex, setClickedBoxIndex] = useState(null);
+  const [culLifePic, setCulLifePic] = useState("");
 
-  const bigBox = "영화관";
-  const foodPic = "theater";
+  const subCategory = JSON.parse(localStorage.getItem('subCategory')); 
+  const bigBox = subCategory["문화생활"][0]
+  useEffect(() => {
+    if (bigBox === "영화") setCulLifePic('theater')
+    else if (bigBox === "재즈바") setCulLifePic('jazzBar')
+  }, []);
 
-  const smallBoxes = [
-    { title: "난포", hours: "영업시간", time: "10:00~20:00", phone: "전화번호", num: "010-7788-0099" },
-    { title: "난포", hours: "영업시간", time: "10:00~20:00", phone: "전화번호", num: "010-7788-0099" },
-    { title: "난포", hours: "영업시간", time: "10:00~20:00", phone: "전화번호", num: "010-7788-0099" },
-    { title: "난포", hours: "영업시간", time: "10:00~20:00", phone: "전화번호", num: "010-7788-0099" },
-    { title: "난포", hours: "영업시간", time: "10:00~20:00", phone: "전화번호", num: "010-7788-0099" },
-  ];
+  useEffect(() => {
+    // API 호출
+    if (culLifePic)
+      fetch(`http://15.165.28.79:3000/place/dessert_cafe`)
+        .then((response) => response.json())
+        .then((data) => {
+          // 받아온 데이터를 상태에 저장
+          if (data.result) {
+            const formattedBoxes = data.result.map((item) => ({
+              title: item.name,
+              hours: "영업시간",
+              time: item.hour || "정보 없음", // 영업시간이 없을 경우 처리
+              phone: "전화번호",
+              num: item.phone_number || "정보 없음", // 전화번호가 없을 경우 처리
+            }));
+            setSmallBoxes(formattedBoxes); // 상태 업데이트
+          }
+        })
+        .catch((error) => console.error("API 호출 에러:", error));
+  }, [culLifePic]); // 컴포넌트 마운트 시 한 번만 실행
 
   return (
     <div
@@ -101,7 +120,7 @@ export default function CreateDCculLife() {
               style={{ width: "50px", margin: "20px" }}
             />
             <img
-              src={`../img/${foodPic}.png`}
+              src={`../img/${culLifePic}.png`}
               alt="Exhibition"
               style={{
                 width: "265px",
@@ -158,21 +177,7 @@ export default function CreateDCculLife() {
           ))}
         </div>
       </div>
-
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "100px" }}>
-      <img
-    src="../img/backBtn.png"
-    alt="back button"
-    style={{ width: "210px", height: "90px", cursor: "pointer" ,paddingRight:'110px'}}
-    onClick={() => navigate("/createDC_popUp")}
-  />
-        <button
-          alt="next button"
-          style={{ width: "210px", height: "90px", marginLeft: "50px", cursor: "pointer" ,border:"none",backgroundColor:'rgba(255, 112, 116, 1)',color:"rgba(255, 255, 255, 1)",fontSize:'24px',fontWeight:"550",borderRadius:"50px"}}
-          onClick={() => navigate("/course_result1")}
-        >생성 결과 보기</button>
-      </div>
-
+      <BottomButtom navigate={navigate}/>
       <div style={{ display: "flex", justifyContent: "center", marginTop: "40px", paddingBottom: "80px" }}>
         <img
           src="../img/FootHome.png"
