@@ -173,26 +173,26 @@ export default function CreateDCpopUp() {
 
       <BottomButtom navigate={navigate}/>
 
-      <div style={{ display: "flex", justifyContent: "center", marginTop: "40px", paddingBottom: "80px" }}>
-        <img
-          src="../img/FootHome.png"
-          alt="home button"
-          style={{ cursor: "pointer" }}
-          onClick={() => navigate("/createDC")}
-        />
-        <img
-          src="../img/FootLike.png"
-          alt="like button"
-          style={{ marginLeft: "100%", cursor: "pointer" }}
-          onClick={() => navigate("/likedDC")}
-        />
-        <img
-          src="../img/FootMypage.png"
-          alt="mypage button"
-          style={{ marginLeft: "100%", cursor: "pointer" }}
-          onClick={() => navigate("/myPage")}
-        />
-      </div>
-    </div>
-  );
+<div style={{ display: "flex", justifyContent: "center", marginTop: "80px", paddingBottom: "110px" }}>
+  <img
+    src="../img/FootHome.png"
+    alt="home button"
+    style={{ cursor: "pointer",width:'180px' }}
+    onClick={() => navigate("/createDC")}
+  />
+  <img
+    src="../img/FootLike.png"
+    alt="like button"
+    style={{ marginLeft: "100%", cursor: "pointer" ,width:'150px' }}
+    onClick={() => navigate("/likedDC")}
+  />
+  <img
+    src="../img/FootMypage.png"
+    alt="mypage button"
+    style={{ marginLeft: "100%", cursor: "pointer",width:'150px'  }}
+    onClick={() => navigate("/myPage")}
+  />
+</div>
+</div>
+);
 }

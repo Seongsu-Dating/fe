@@ -16,14 +16,15 @@ export default function CreateDCculLife() {
   const subCategory = JSON.parse(localStorage.getItem('subCategory')); 
   const bigBox = subCategory["문화생활"][0]
   useEffect(() => {
-    if (bigBox === "영화") setCulLifePic('theater')
+    if (bigBox === "영화") setCulLifePic('movie')
     else if (bigBox === "재즈바") setCulLifePic('jazzBar')
   }, []);
 
   useEffect(() => {
     // API 호출
     if (culLifePic)
-      fetch(`http://15.165.28.79:3000/place/dessert_cafe`)
+      fetch(`http://15.165.28.79:3000/place/${culLifePic.toLowerCase()}`)
+
         .then((response) => response.json())
         .then((data) => {
           // 받아온 데이터를 상태에 저장
@@ -178,26 +179,27 @@ export default function CreateDCculLife() {
         </div>
       </div>
       <BottomButtom navigate={navigate}/>
-      <div style={{ display: "flex", justifyContent: "center", marginTop: "40px", paddingBottom: "80px" }}>
-        <img
-          src="../img/FootHome.png"
-          alt="home button"
-          style={{ cursor: "pointer" }}
-          onClick={() => navigate("/createDC")}
-        />
-        <img
-          src="../img/FootLike.png"
-          alt="like button"
-          style={{ marginLeft: "100%", cursor: "pointer" }}
-          onClick={() => navigate("/likedDC")}
-        />
-        <img
-          src="../img/FootMypage.png"
-          alt="mypage button"
-          style={{ marginLeft: "100%", cursor: "pointer" }}
-          onClick={() => navigate("/myPage")}
-        />
-      </div>
-    </div>
-  );
+
+<div style={{ display: "flex", justifyContent: "center", marginTop: "80px", paddingBottom: "110px" }}>
+  <img
+    src="../img/FootHome.png"
+    alt="home button"
+    style={{ cursor: "pointer",width:'180px' }}
+    onClick={() => navigate("/createDC")}
+  />
+  <img
+    src="../img/FootLike.png"
+    alt="like button"
+    style={{ marginLeft: "100%", cursor: "pointer" ,width:'150px' }}
+    onClick={() => navigate("/likedDC")}
+  />
+  <img
+    src="../img/FootMypage.png"
+    alt="mypage button"
+    style={{ marginLeft: "100%", cursor: "pointer",width:'150px'  }}
+    onClick={() => navigate("/myPage")}
+  />
+</div>
+</div>
+);
 }
