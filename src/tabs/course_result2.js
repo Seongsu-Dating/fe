@@ -1,13 +1,14 @@
 //import React from "react";
 import "../App.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import React, { useRef, useEffect } from 'react';
-
+import $ from 'jquery';
 
 
 export default function Resutlt2() {
   const navigate = useNavigate(); // Initialize useNavigate
-
+  const location = useLocation();
+  const { descriptions } = location.state || {}; // Retrieve descriptions from state
   
   return (
     <div style={
@@ -62,14 +63,9 @@ export default function Resutlt2() {
                   textAlign:"left",
                 }}
               >
-                <p style={{fontSize:"25px",color:'rgba(0, 0, 0, 0.8)'}}>오늘의 데이트스코스에 관해</p>
-                <p style={{fontSize:"24px",color:"rgba(0, 0, 0, 0.6)"}}>
-                  세부내용세부내용세부내용세부내용세부내용세부내용 
-                  세부내용세부내용세부내용세부내용세부내용세부내용 
-                  세부내용세부내용세부내용세부내용세부내용세부내용
-                  세부내용세부내용세부내용세부내용세부내용세부내용 
-                  세부내용세부내용세부내용세부내용세부내용세부내용 
-                  세부내용세부내용세부내용세부내용세부내용세부내용 
+                   <p style={{ fontSize: "25px", color: 'rgba(0, 0, 0, 0.8)' }}>오늘의 데이트코스에 관해💕😊</p>
+                <p style={{ fontSize: "24px", color: "rgba(0, 0, 0, 0.6)" }}>
+                  {descriptions} {/* Display the passed descriptions */}! 다음으로 경로 안내 추천드립니다😉 이상 즐거운 데이트 되세요.💕😊
                 </p>
               </div> 
              

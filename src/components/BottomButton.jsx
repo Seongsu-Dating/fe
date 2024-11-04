@@ -14,7 +14,7 @@ const BottomButtom = ({navigate}) => {
         {!!checkIsLastPage() ? (
             <button
                 alt="next button"
-                style={{ width: "210px", height: "90px", marginLeft: "50px", cursor: "pointer" ,border:"none",backgroundColor:'rgba(255, 112, 116, 1)',color:"rgba(255, 255, 255, 1)",fontSize:'24px',fontWeight:"550",borderRadius:"50px"}}
+                style={{ width: "210px", height: "90px", marginLeft: "200px", cursor: "pointer" ,border:"none",backgroundColor:'rgba(255, 112, 116, 1)',color:"rgba(255, 255, 255, 1)",fontSize:'24px',fontWeight:"550",borderRadius:"50px"}}
                 onClick={() => navigate("/course_result1")}
             >
                 생성 결과 보기

@@ -33,6 +33,8 @@ export default function CreateDCcafe() {
               place_type: item.place_type || "음식 종류 정보 없음",
               rating: item.rating || "평점 없음",
               review: item.review || "리뷰 없음",
+              latitude: item.latitude || "위도 정보 없음",
+              longitude: item.longitude || "경도 정보 없음",
             }));
             setSmallBoxes(formattedBoxes);
           }
@@ -40,6 +42,29 @@ export default function CreateDCcafe() {
         .catch((error) => console.error("API 호출 에러:", error));
     }
   }, [cafePic]);
+
+  const handleBoxClick = (index) => {
+    setClickedBoxIndex(index);
+    const selectedBox = smallBoxes[index];
+
+    // 위도와 경도를 객체 형태로 저장
+    const coordinates = {
+      latitude: selectedBox.latitude,
+      longitude: selectedBox.longitude,
+    };
+    
+    // 기존 localStorage의 딕셔너리 가져오기
+    const existingData = JSON.parse(localStorage.getItem('coordinates')) || {};
+    
+    // 새로운 좌표 추가
+    existingData[selectedBox.title] = coordinates;
+
+    // localStorage에 저장 (문자열 형태로 변환)
+    localStorage.setItem('coordinates', JSON.stringify(existingData));
+
+    // 저장한 후에 로그 출력
+    console.log(existingData); // 이제 올바른 값을 보여야 함
+  };
 
   return (
     <div
@@ -156,7 +181,7 @@ export default function CreateDCcafe() {
               }}
               onMouseEnter={() => setHoveredBoxIndex(index)}
               onMouseLeave={() => setHoveredBoxIndex(null)}
-              onClick={() => setClickedBoxIndex(index)}
+              onClick={() => handleBoxClick(index)}
             >
               <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10px", fontWeight: "bolder", fontSize: "28px" }}>
                 {box.title}
@@ -168,7 +193,7 @@ export default function CreateDCcafe() {
                 평점: {box.rating}
               </p>
               <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
-               {box.review}
+                {box.review}
               </p>
             </div>
           ))}

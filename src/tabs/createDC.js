@@ -36,13 +36,34 @@ export default function CreateDC() {
               place_type: item.place_type || "음식 종류 정보 없음",
               rating: item.rating || "평점 없음",
               review: item.review || "리뷰 없음",
+              latitude: item.latitude || "위도 정보 없음",
+              longitude: item.longitude || "경도 정보 없음",
             }));
             setSmallBoxes(formattedBoxes);
           }
         })
         .catch((error) => console.error("API 호출 에러:", error));
     }
-  }, [foodPic]); // 종속성 배열을 foodPic으로 수정
+  }, [foodPic]);
+
+  const handleBoxClick = (index) => {
+    setClickedBoxIndex(index);
+    const selectedBox = smallBoxes[index];
+    
+    // 위도와 경도를 객체 형태로 저장
+    const coordinates = JSON.parse(localStorage.getItem('coordinates')) || {};
+    coordinates[bigBox] = {
+      latitude: selectedBox.latitude,
+      longitude: selectedBox.longitude,
+    };
+    
+    // localStorage에 저장
+    localStorage.setItem('coordinates', JSON.stringify(coordinates));
+    
+    // 저장한 후에 로그 출력
+    const storedCoordinates = JSON.parse(localStorage.getItem('coordinates'));
+    console.log("저장된 좌표:", storedCoordinates); // 저장된 좌표를 확인
+  };
 
   return (
     <div
@@ -80,7 +101,7 @@ export default function CreateDC() {
         <p
           style={{
             color: "rgba(0, 0, 0, 0.6)",
-            fontSize:"27PX",
+            fontSize: "27PX",
             marginTop: '0',
             marginBottom: "5px",
           }}
@@ -116,7 +137,7 @@ export default function CreateDC() {
             />
             <img
               src={`../img/${foodPic}.png`}
-              alt="Korean food"
+              alt={foodPic + " food"}
               style={{ width: "400px", zIndex: 10, position: "relative", paddingLeft: "150px" }}
             />
             <div style={{ marginTop: "80px", marginLeft: "20px", marginRight: "20px" }}>
@@ -151,9 +172,9 @@ export default function CreateDC() {
               }}
               onMouseEnter={() => setHoveredBoxIndex(index)}
               onMouseLeave={() => setHoveredBoxIndex(null)}
-              onClick={() => setClickedBoxIndex(index)}
+              onClick={() => handleBoxClick(index)}
             >
-             <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10px", fontWeight: "bolder", fontSize: "28px" }}>
+              <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10px", fontWeight: "bolder", fontSize: "28px" }}>
                 {box.title}
               </p>
               <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
@@ -163,31 +184,32 @@ export default function CreateDC() {
                 평점: {box.rating}
               </p>
               <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
-               {box.review}
+                {box.review}
               </p>
             </div>
           ))}
         </div>
       </div>
+      
       <BottomButtom navigate={navigate}/>
 
       <div style={{ display: "flex", justifyContent: "center", marginTop: "80px", paddingBottom: "110px" }}>
         <img
           src="../img/FootHome.png"
           alt="home button"
-          style={{ cursor: "pointer",width:'180px' }}
+          style={{ cursor: "pointer", width:'180px' }}
           onClick={() => navigate("/createDC")}
         />
         <img
           src="../img/FootLike.png"
           alt="like button"
-          style={{ marginLeft: "100%", cursor: "pointer" ,width:'150px' }}
+          style={{ marginLeft: "100%", cursor: "pointer", width:'150px' }}
           onClick={() => navigate("/likedDC")}
         />
         <img
           src="../img/FootMypage.png"
           alt="mypage button"
-          style={{ marginLeft: "100%", cursor: "pointer",width:'150px'  }}
+          style={{ marginLeft: "100%", cursor: "pointer", width:'150px' }}
           onClick={() => navigate("/myPage")}
         />
       </div>

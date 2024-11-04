@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
-import moveToNextCategory from "../utils/moveToNextCategory";
-import moveToPreviousCategory from "../utils/moveToPreviousCategory";
 import BottomButtom from "../components/BottomButton";
 
 export default function CreateDCpopUp() {
@@ -16,23 +14,49 @@ export default function CreateDCpopUp() {
 
   useEffect(() => {
     // 팝업 데이터를 API로부터 불러옴
-    fetch('http://15.165.28.79:3000/place/popup')
-    .then((response) => response.json())
-    .then((data) => {
-    console.log("API 응답 데이터:", data); // API 응답 데이터를 확인
-    if (data.result) {
-      const formattedBoxes = data.result.map((item) => ({
-        title: item.name,
-        open_hour: item.open_hour || "영업시간 정보 없음",
-        place_type: item.place_type || "음식 종류 정보 없음",
-        rating: item.rating || "평점 없음",
-        review: item.review || "리뷰 없음",
-      }));
-      setSmallBoxes(formattedBoxes);
-      }
-     })
-    .catch((error) => console.error("API 호출 에러:", error));
-     }, [popUpPic]); // 컴포넌트 마운트 시 한 번만 실행
+    fetch("http://15.165.28.79:3000/place/popup")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("API 응답 데이터:", data); // API 응답 데이터를 확인
+        if (data.result) {
+          const formattedBoxes = data.result.map((item) => ({
+            title: item.name,
+            open_hour: item.open_hour || "영업시간 정보 없음",
+            place_type: item.place_type || "음식 종류 정보 없음",
+            rating: item.rating || "평점 없음",
+            review: item.review || "리뷰 없음",
+            latitude: item.latitude || "위도 정보 없음",
+            longitude: item.longitude || "경도 정보 없음",
+          }));
+          setSmallBoxes(formattedBoxes);
+        }
+      })
+      .catch((error) => console.error("API 호출 에러:", error));
+  }, [popUpPic]);
+
+  const handleBoxClick = (index) => {
+    setClickedBoxIndex(index);
+    const selectedBox = smallBoxes[index];
+    
+    // 위도와 경도를 객체 형태로 저장
+    const coordinates = {
+      latitude: selectedBox.latitude,
+      longitude: selectedBox.longitude,
+    };
+
+    // 기존 localStorage의 딕셔너리 가져오기
+    const existingData = JSON.parse(localStorage.getItem('coordinates')) || {};
+
+    // 새로운 좌표 추가
+    existingData[selectedBox.title] = coordinates;
+
+    // localStorage에 저장 (문자열 형태로 변환)
+    localStorage.setItem('coordinates', JSON.stringify(existingData));
+
+    // 저장한 후에 로그 출력
+    console.log(existingData); // 이제 올바른 값을 보여야 함
+  };
+
   return (
     <div
       style={{
@@ -69,7 +93,12 @@ export default function CreateDCpopUp() {
           <img
             src="../img/search.png"
             alt="search"
-            style={{ width: "60px", height: "60px", marginRight: "3px", cursor: "pointer" }}
+            style={{
+              width: "60px",
+              height: "60px",
+              marginRight: "3px",
+              cursor: "pointer",
+            }}
           />
         </div>
         <p
@@ -84,7 +113,14 @@ export default function CreateDCpopUp() {
         >
           신개념 AI 추천 데이트코스 메이커, 성수데이팅
         </p>
-        <p style={{ marginRight: "375px", marginBottom: 0, fontWeight: "bolder", fontSize: "40px" }}>
+        <p
+          style={{
+            marginRight: "375px",
+            marginBottom: 0,
+            fontWeight: "bolder",
+            fontSize: "40px",
+          }}
+        >
           밥 먹고 뭐하지?
         </p>
       </div>
@@ -154,51 +190,87 @@ export default function CreateDCpopUp() {
               }}
               onMouseEnter={() => setHoveredBoxIndex(index)}
               onMouseLeave={() => setHoveredBoxIndex(null)}
-              onClick={() => setClickedBoxIndex(index)} // 클릭 이벤트
+              onClick={() => handleBoxClick(index)} // 클릭 시 위도와 경도 콘솔 출력
             >
-                   <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10px", fontWeight: "bolder", fontSize: "28px" }}>
+              <p
+                style={{
+                  paddingTop: "20px",
+                  paddingLeft: "20px",
+                  margin: "0",
+                  marginBottom: "10px",
+                  fontWeight: "bolder",
+                  fontSize: "28px",
+                }}
+              >
                 {box.title}
               </p>
-              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+              <p
+                style={{
+                  paddingTop: "10px",
+                  paddingLeft: "20px",
+                  margin: 0,
+                  color: "rgba(0, 0, 0, 0.41)",
+                  fontSize: "21px",
+                }}
+              >
                 {box.place_type}
               </p>
-              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+              <p
+                style={{
+                  paddingTop: "10px",
+                  paddingLeft: "20px",
+                  margin: 0,
+                  color: "rgba(0, 0, 0, 0.41)",
+                  fontSize: "21px",
+                }}
+              >
                 평점: {box.rating}
               </p>
-              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
-               {box.review}
+              <p
+                style={{
+                  paddingTop: "10px",
+                  paddingLeft: "20px",
+                  margin: 0,
+                  color: "rgba(0, 0, 0, 0.41)",
+                  fontSize: "21px",
+                }}
+              >
+                {box.review}
               </p>
             </div>
           ))}
         </div>
       </div>
 
+      <BottomButtom navigate={navigate} />
 
-
-     
-
-      <BottomButtom navigate={navigate}/>
-
-<div style={{ display: "flex", justifyContent: "center", marginTop: "80px", paddingBottom: "110px" }}>
-  <img
-    src="../img/FootHome.png"
-    alt="home button"
-    style={{ cursor: "pointer",width:'180px' }}
-    onClick={() => navigate("/createDC")}
-  />
-  <img
-    src="../img/FootLike.png"
-    alt="like button"
-    style={{ marginLeft: "100%", cursor: "pointer" ,width:'150px' }}
-    onClick={() => navigate("/likedDC")}
-  />
-  <img
-    src="../img/FootMypage.png"
-    alt="mypage button"
-    style={{ marginLeft: "100%", cursor: "pointer",width:'150px'  }}
-    onClick={() => navigate("/myPage")}
-  />
-</div>
-</div>
-);
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "80px",
+          paddingBottom: "110px",
+        }}
+      >
+        <img
+          src="../img/FootHome.png"
+          alt="home button"
+          style={{ cursor: "pointer", width: "180px" }}
+          onClick={() => navigate("/createDC")}
+        />
+        <img
+          src="../img/FootLike.png"
+          alt="like button"
+          style={{ marginLeft: "100%", cursor: "pointer", width: "150px" }}
+          onClick={() => navigate("/likedDC")}
+        />
+        <img
+          src="../img/FootMy.png"
+          alt="my button"
+          style={{ marginLeft: "100%", cursor: "pointer", width: "150px" }}
+          onClick={() => navigate("/myDC")}
+        />
+      </div>
+    </div>
+  );
 }

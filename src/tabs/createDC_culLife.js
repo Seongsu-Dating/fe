@@ -13,33 +13,51 @@ export default function CreateDCculLife() {
   const [clickedBoxIndex, setClickedBoxIndex] = useState(null);
   const [culLifePic, setCulLifePic] = useState("");
 
-  const subCategory = JSON.parse(localStorage.getItem('subCategory')); 
-  const bigBox = subCategory["문화생활"][0]
+  const subCategory = JSON.parse(localStorage.getItem('subCategory'));
+  const bigBox = subCategory["문화생활"][0];
+
   useEffect(() => {
-    if (bigBox === "영화") setCulLifePic('movie')
-    else if (bigBox === "재즈바") setCulLifePic('jazzBar')
-  }, []);
+    if (bigBox === "영화") setCulLifePic('movie');
+    else if (bigBox === "재즈바") setCulLifePic('jazzBar');
+  }, [bigBox]);
 
   useEffect(() => {
     // API 호출
-    if (culLifePic)
+    if (culLifePic) {
       fetch(`http://15.165.28.79:3000/place/${culLifePic.toLowerCase()}`)
-      .then((response) => response.json())
-      .then((data) => {
-      console.log("API 응답 데이터:", data); // API 응답 데이터를 확인
-      if (data.result) {
-        const formattedBoxes = data.result.map((item) => ({
-          title: item.name,
-          open_hour: item.open_hour || "영업시간 정보 없음",
-          place_type: item.place_type || "음식 종류 정보 없음",
-          rating: item.rating || "평점 없음",
-          review: item.review || "리뷰 없음",
-        }));
-        setSmallBoxes(formattedBoxes);
-      }
-    })
-    .catch((error) => console.error("API 호출 에러:", error));
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("API 응답 데이터:", data); // API 응답 데이터를 확인
+          if (data.result) {
+            const formattedBoxes = data.result.map((item) => ({
+              title: item.name,
+              open_hour: item.open_hour || "영업시간 정보 없음",
+              place_type: item.place_type || "음식 종류 정보 없음",
+              rating: item.rating || "평점 없음",
+              review: item.review || "리뷰 없음",
+              latitude: item.latitude || "위도 정보 없음",
+              longitude: item.longitude || "경도 정보 없음",
+            }));
+            setSmallBoxes(formattedBoxes);
+          }
+        })
+        .catch((error) => console.error("API 호출 에러:", error));
+    }
   }, [culLifePic]); // 컴포넌트 마운트 시 한 번만 실행
+
+  const handleBoxClick = (index) => {
+    setClickedBoxIndex(index);
+    const selectedBox = smallBoxes[index];
+    console.log("위도:", selectedBox.latitude, "경도:", selectedBox.longitude);
+
+    // localStorage에 좌표 추가
+    const coordinates = JSON.parse(localStorage.getItem('coordinates')) || {};
+    coordinates[selectedBox.title] = {
+      latitude: selectedBox.latitude,
+      longitude: selectedBox.longitude,
+    };
+    localStorage.setItem('coordinates', JSON.stringify(coordinates));
+  };
 
   return (
     <div
@@ -85,7 +103,7 @@ export default function CreateDCculLife() {
             marginRight: "180px",
             color: "rgba(0, 0, 0, 0.6)",
             fontSize: "25px",
-            marginLeft:'25px',
+            marginLeft: '25px',
             marginTop: "0",
             marginBottom: "30px",
           }}
@@ -162,49 +180,47 @@ export default function CreateDCculLife() {
               }}
               onMouseEnter={() => setHoveredBoxIndex(index)}
               onMouseLeave={() => setHoveredBoxIndex(null)}
-              onClick={() => setClickedBoxIndex(index)}
+              onClick={() => handleBoxClick(index)} // 클릭 시 위도와 경도 콘솔 출력
             >
-              <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10px", fontWeight: "bolder", fontSize: "28px" }}>
+              <p style={{ paddingTop: "20px", paddingLeft: "20px", margin: "0", marginBottom: "10px", fontWeight: "bolder", fontSize: "28px" }}>
                 {box.title}
               </p>
-              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color: "rgba(0, 0, 0, 0.41)", fontSize: "21px" }}>
                 {box.place_type}
               </p>
-              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color: "rgba(0, 0, 0, 0.41)", fontSize: "21px" }}>
                 평점: {box.rating}
               </p>
-              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
-               {box.review}
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color: "rgba(0, 0, 0, 0.41)", fontSize: "21px" }}>
+                {box.review}
               </p>
             </div>
           ))}
         </div>
       </div>
 
+      <BottomButtom navigate={navigate} />
 
-
-      <BottomButtom navigate={navigate}/>
-
-<div style={{ display: "flex", justifyContent: "center", marginTop: "80px", paddingBottom: "110px" }}>
-  <img
-    src="../img/FootHome.png"
-    alt="home button"
-    style={{ cursor: "pointer",width:'180px' }}
-    onClick={() => navigate("/createDC")}
-  />
-  <img
-    src="../img/FootLike.png"
-    alt="like button"
-    style={{ marginLeft: "100%", cursor: "pointer" ,width:'150px' }}
-    onClick={() => navigate("/likedDC")}
-  />
-  <img
-    src="../img/FootMypage.png"
-    alt="mypage button"
-    style={{ marginLeft: "100%", cursor: "pointer",width:'150px'  }}
-    onClick={() => navigate("/myPage")}
-  />
-</div>
-</div>
-);
+      <div style={{ display: "flex", justifyContent: "center", marginTop: "80px", paddingBottom: "110px" }}>
+        <img
+          src="../img/FootHome.png"
+          alt="home button"
+          style={{ cursor: "pointer", width: '180px' }}
+          onClick={() => navigate("/createDC")}
+        />
+        <img
+          src="../img/FootLike.png"
+          alt="like button"
+          style={{ marginLeft: "100%", cursor: "pointer", width: '150px' }}
+          onClick={() => navigate("/likedDC")}
+        />
+        <img
+          src="../img/FootMypage.png"
+          alt="mypage button"
+          style={{ marginLeft: "100%", cursor: "pointer", width: '150px' }}
+          onClick={() => navigate("/myPage")}
+        />
+      </div>
+    </div>
+  );
 }
