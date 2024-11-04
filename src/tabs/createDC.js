@@ -5,45 +5,44 @@ import moveToNextCategory from "../utils/moveToNextCategory";
 import moveToPreviousCategory from "../utils/moveToPreviousCategory";
 import BottomButtom from "../components/BottomButton";
 
-
-
 export default function CreateDC() {
   const [smallBoxes, setSmallBoxes] = useState([]); // 데이터를 저장할 상태
   const navigate = useNavigate();
   const [hoveredBoxIndex, setHoveredBoxIndex] = useState(null);
   const [clickedBoxIndex, setClickedBoxIndex] = useState(null);
   const [foodPic, setFoodPic] = useState("");
-  
+
   const subCategory = JSON.parse(localStorage.getItem('subCategory')); 
-  const bigBox = subCategory["밥"][0]
+  const bigBox = subCategory["밥"][0];
+
   useEffect(() => {
-    if (bigBox === "한식") setFoodPic("Korean")
-      else if (bigBox === "일식") setFoodPic("Japanese")
-      else if (bigBox === "중식") setFoodPic("Chinese") 
-      else if (bigBox === "양식") setFoodPic("Western")
-  }, []);
+    if (bigBox === "한식") setFoodPic("Korean");
+    else if (bigBox === "일식") setFoodPic("Japanese");
+    else if (bigBox === "중식") setFoodPic("Chinese");
+    else if (bigBox === "양식") setFoodPic("Western");
+  }, [bigBox]);
 
   useEffect(() => {
     // API 호출
-    if (foodPic){
-    fetch(`http://15.165.28.79:3000/place/${foodPic?.toLowerCase()}`)
-      .then((response) => response.json())
-      .then((data) => {
-        // 받아온 데이터가 있으면 상태를 업데이트
-        if (data.result) {
-          const formattedBoxes = data.result.map((item) => ({
-            title: item.name,
-            hours: "영업시간",
-            time: item.hour || "정보 없음", // 영업시간이 없을 경우 처리
-            phone: "전화번호",
-            num: item.phone_number || "정보 없음", // 전화번호가 없을 경우 처리
-          }));
-          setSmallBoxes(formattedBoxes); // 상태 업데이트
-        }
-      })
-      .catch((error) => console.error("API 호출 에러:", error));
+    if (foodPic) {
+      fetch(`http://15.165.28.79:3000/place/${foodPic?.toLowerCase()}`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("API 응답 데이터:", data); // API 응답 데이터를 확인
+          if (data.result) {
+            const formattedBoxes = data.result.map((item) => ({
+              title: item.name,
+              open_hour: item.open_hour || "영업시간 정보 없음",
+              place_type: item.place_type || "음식 종류 정보 없음",
+              rating: item.rating || "평점 없음",
+              review: item.review || "리뷰 없음",
+            }));
+            setSmallBoxes(formattedBoxes);
+          }
+        })
+        .catch((error) => console.error("API 호출 에러:", error));
     }
-  }, [foodPic]); 
+  }, [foodPic]); // 종속성 배열을 foodPic으로 수정
 
   return (
     <div
@@ -72,20 +71,16 @@ export default function CreateDC() {
               marginBottom: "5px",
               fontSize: "50px",
               fontWeight: "bold",
-        
               color: "rgba(255, 112, 116, 1)",
             }}
           >
             데이트코스 생성
           </p>
-
         </div>
         <p
           style={{
-
             color: "rgba(0, 0, 0, 0.6)",
             fontSize:"27PX",
-
             marginTop: '0',
             marginBottom: "5px",
           }}
@@ -158,21 +153,22 @@ export default function CreateDC() {
               onMouseLeave={() => setHoveredBoxIndex(null)}
               onClick={() => setClickedBoxIndex(index)}
             >
-              <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10PX", fontWeight: "bolder", fontSize: "28px" }}>
+             <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10px", fontWeight: "bolder", fontSize: "28px" }}>
                 {box.title}
               </p>
-              <p style={{paddingTop:"15px",paddingLeft: "20px", margin: 0 ,color:"rgba(0, 0, 0, 0.41)",fontSize:"21px" }}>
-                {box.hours} {box.time}
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+                {box.place_type}
               </p>
-              <p style={{ paddingTop:"10px",paddingLeft: "20px", margin: 0 ,color:"rgba(0, 0, 0, 0.41)" ,fontSize:"21px"}}>
-                {box.phone} {box.num}
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+                평점: {box.rating}
+              </p>
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+               {box.review}
               </p>
             </div>
           ))}
         </div>
       </div>
-      
-
       <BottomButtom navigate={navigate}/>
 
       <div style={{ display: "flex", justifyContent: "center", marginTop: "80px", paddingBottom: "110px" }}>

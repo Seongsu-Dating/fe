@@ -5,41 +5,41 @@ import moveToNextCategory from "../utils/moveToNextCategory";
 import moveToPreviousCategory from "../utils/moveToPreviousCategory";
 import BottomButtom from "../components/BottomButton";
 
-
 export default function CreateDCcafe() {
-  const [smallBoxes, setSmallBoxes] = useState([]); // 상태 선언
+  const [smallBoxes, setSmallBoxes] = useState([]);
   const navigate = useNavigate();
   const [hoveredBoxIndex, setHoveredBoxIndex] = useState(null);
   const [clickedBoxIndex, setClickedBoxIndex] = useState(null);
   const [cafePic, setCafePic] = useState("");
-  
-  const subCategory = JSON.parse(localStorage.getItem('subCategory')); 
-  const bigBox = subCategory["카페"][0]
-  useEffect(() => {
-    if (bigBox === "디저트") setCafePic('dessert')
-    else if (bigBox === "커피전문점") setCafePic('expert')
-  }, []);
+
+  const subCategory = JSON.parse(localStorage.getItem('subCategory'));
+  const bigBox = subCategory["카페"][0];
 
   useEffect(() => {
-    // API 호출
-    if (cafePic)
+    if (bigBox === "디저트") setCafePic('dessert');
+    else if (bigBox === "커피전문점") setCafePic('expert');
+  }, [bigBox]);
+
+  useEffect(() => {
+    if (cafePic) {
       fetch(`http://15.165.28.79:3000/place/${cafePic}_cafe`)
         .then((response) => response.json())
         .then((data) => {
-          // 받아온 데이터를 상태에 저장
+          console.log("API 응답 데이터:", data); // API 응답 데이터를 확인
           if (data.result) {
             const formattedBoxes = data.result.map((item) => ({
               title: item.name,
-              hours: "영업시간",
-              time: item.hour || "정보 없음", // 영업시간이 없을 경우 처리
-              phone: "전화번호",
-              num: item.phone_number || "정보 없음", // 전화번호가 없을 경우 처리
+              open_hour: item.open_hour || "영업시간 정보 없음",
+              place_type: item.place_type || "음식 종류 정보 없음",
+              rating: item.rating || "평점 없음",
+              review: item.review || "리뷰 없음",
             }));
-            setSmallBoxes(formattedBoxes); // 상태 업데이트
+            setSmallBoxes(formattedBoxes);
           }
         })
         .catch((error) => console.error("API 호출 에러:", error));
-  }, [cafePic]); // 컴포넌트 마운트 시 한 번만 실행
+    }
+  }, [cafePic]);
 
   return (
     <div
@@ -84,9 +84,9 @@ export default function CreateDCcafe() {
           style={{
             marginRight: "180px",
             color: "rgba(0, 0, 0, 0.6)",
-            fontSize: "25PX",
+            fontSize: "25px",
             marginTop: "0",
-            marginLeft:"25px",
+            marginLeft: "25px",
             marginBottom: "30px",
           }}
         >
@@ -110,7 +110,7 @@ export default function CreateDCcafe() {
               display: "flex",
               flexDirection: "column",
               textAlign: "left",
-              marginTop: "30PX",
+              marginTop: "30px",
             }}
           >
             <img
@@ -123,12 +123,12 @@ export default function CreateDCcafe() {
               src={`../img/doughnut.png`}
               alt="Cafe"
               style={{ width: "555px", zIndex: 10, position: "relative"}}
-              />
-              <div style={{ marginTop: "80px", marginLeft: "20px", marginRight: "20px" }}>
-                <h1 style={{fontSize:'40px'}}>{bigBox}</h1>
-                <p style={{ color:"rgba(0, 0, 0, 0.41)", fontSize:"25PX", fontWeight:"bolder" }}>
-                  서울숲 근처의 BEST {bigBox} 맛집 추천
-                </p>
+            />
+            <div style={{ marginTop: "80px", marginLeft: "20px", marginRight: "20px" }}>
+              <h1 style={{fontSize:'40px'}}>{bigBox}</h1>
+              <p style={{ color:"rgba(0, 0, 0, 0.41)", fontSize:"25px", fontWeight:"bolder" }}>
+                서울숲 근처의 BEST {bigBox} 맛집 추천
+              </p>
             </div>
           </div>
         </div>
@@ -142,7 +142,7 @@ export default function CreateDCcafe() {
                 cursor: "pointer",
                 width: "500px",
                 height: "180px",
-                marginTop: "30PX",
+                marginTop: "30px",
                 borderRadius: "20px",
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 backgroundColor:
@@ -158,14 +158,17 @@ export default function CreateDCcafe() {
               onMouseLeave={() => setHoveredBoxIndex(null)}
               onClick={() => setClickedBoxIndex(index)}
             >
-                  <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10PX", fontWeight: "bolder", fontSize: "28px" }}>
+              <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10px", fontWeight: "bolder", fontSize: "28px" }}>
                 {box.title}
               </p>
-              <p style={{paddingTop:"25px",paddingLeft: "20px", margin: 0 ,color:"rgba(0, 0, 0, 0.41)",fontSize:"21px" }}>
-                {box.hours} {box.time}
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+                {box.place_type}
               </p>
-              <p style={{ paddingTop:"10px",paddingLeft: "20px", margin: 0 ,color:"rgba(0, 0, 0, 0.41)" ,fontSize:"21px"}}>
-                {box.phone} {box.num}
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+                평점: {box.rating}
+              </p>
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+               {box.review}
               </p>
             </div>
           ))}
@@ -174,26 +177,26 @@ export default function CreateDCcafe() {
 
       <BottomButtom navigate={navigate}/>
 
-<div style={{ display: "flex", justifyContent: "center", marginTop: "80px", paddingBottom: "110px" }}>
-  <img
-    src="../img/FootHome.png"
-    alt="home button"
-    style={{ cursor: "pointer",width:'180px' }}
-    onClick={() => navigate("/createDC")}
-  />
-  <img
-    src="../img/FootLike.png"
-    alt="like button"
-    style={{ marginLeft: "100%", cursor: "pointer" ,width:'150px' }}
-    onClick={() => navigate("/likedDC")}
-  />
-  <img
-    src="../img/FootMypage.png"
-    alt="mypage button"
-    style={{ marginLeft: "100%", cursor: "pointer",width:'150px'  }}
-    onClick={() => navigate("/myPage")}
-  />
-</div>
-</div>
-);
+      <div style={{ display: "flex", justifyContent: "center", marginTop: "80px", paddingBottom: "110px" }}>
+        <img
+          src="../img/FootHome.png"
+          alt="home button"
+          style={{ cursor: "pointer", width: '180px' }}
+          onClick={() => navigate("/createDC")}
+        />
+        <img
+          src="../img/FootLike.png"
+          alt="like button"
+          style={{ marginLeft: "100%", cursor: "pointer", width: '150px' }}
+          onClick={() => navigate("/likedDC")}
+        />
+        <img
+          src="../img/FootMypage.png"
+          alt="mypage button"
+          style={{ marginLeft: "100%", cursor: "pointer", width: '150px' }}
+          onClick={() => navigate("/myPage")}
+        />
+      </div>
+    </div>
+  );
 }

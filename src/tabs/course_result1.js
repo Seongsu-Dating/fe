@@ -13,7 +13,7 @@ export default function Result1() {
       padding: '0',
       backgroundColor: 'rgb(255, 206, 234)'}}>
       <img src="../img/back.png"style={{display:'flex',marginBottom:'25px',marginLeft:'20px',height:'50px',cursor:'pointer',paddingTop:'20px'}} className="backBtn" alt="Back Button" />
-      <img src="../img/doughnut.png"style={{height:'800px',marginLeft:'20px'}} className="doughnut" alt="Doughnut"/>
+      <img src="../img/map.png"style={{marginBottom:'80px',height:'800px',marginLeft:'20px'}} className="doughnut" alt="Doughnut"/>
       <div className="background_white"style={{backgroundColor:'rgba(240,248,255,0.869)',borderTopRightRadius:'40px',borderTopLeftRadius:"40px"}}>
 
 
@@ -60,12 +60,13 @@ export default function Result1() {
               >
                 <p style={{fontSize:"25px",color:'rgba(0, 0, 0, 0.8)'}}>오늘의 데이트스코스에 관해</p>
                 <p style={{fontSize:"24px",color:"rgba(0, 0, 0, 0.6)"}}>
-                  세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용 
-                  세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용 
-                  세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용
-                  세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용
-                  세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용 
-                  세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용세부내용 
+                  성수동 데이트 코스, AI가 추천합니다! 
+                  오전엔 대림창고에서 브런치와 커피로 여유롭게 시작하세요.
+                  오후엔 재즈엑스오버에서 음악을 감상하고,
+                  이어서 코사이어티 같은 전시 공간에서 작품을 관람하며 산책해보세요.
+                  저녁은 바위파스타에서 맛있는 이탈리안 요리와 함께 로맨틱하게 마무리!
+                  성수동에서 완벽한 하루를 즐겨보세요.
+
                 </p>
               </div> 
              

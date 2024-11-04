@@ -17,23 +17,22 @@ export default function CreateDCpopUp() {
   useEffect(() => {
     // 팝업 데이터를 API로부터 불러옴
     fetch('http://15.165.28.79:3000/place/popup')
-      .then((response) => response.json())
-      .then((data) => {
-        // 받아온 데이터를 smallBoxes 상태에 저장
-        if (data.result) {
-          const formattedBoxes = data.result.map((item) => ({
-            title: item.name,
-            hours: "영업시간",
-            time: item.hour || "정보 없음", // 영업시간이 없을 경우 처리
-            phone: "전화번호",
-            num: item.phone_number || "정보 없음", // 전화번호가 없을 경우 처리
-          }));
-          setSmallBoxes(formattedBoxes); // 상태 업데이트
-        }
-      })
-      .catch((error) => console.error("API 호출 에러:", error));
-  }, []); // 컴포넌트가 마운트될 때 한 번 실행
-
+    .then((response) => response.json())
+    .then((data) => {
+    console.log("API 응답 데이터:", data); // API 응답 데이터를 확인
+    if (data.result) {
+      const formattedBoxes = data.result.map((item) => ({
+        title: item.name,
+        open_hour: item.open_hour || "영업시간 정보 없음",
+        place_type: item.place_type || "음식 종류 정보 없음",
+        rating: item.rating || "평점 없음",
+        review: item.review || "리뷰 없음",
+      }));
+      setSmallBoxes(formattedBoxes);
+      }
+     })
+    .catch((error) => console.error("API 호출 에러:", error));
+     }, [popUpPic]); // 컴포넌트 마운트 시 한 번만 실행
   return (
     <div
       style={{
@@ -157,19 +156,26 @@ export default function CreateDCpopUp() {
               onMouseLeave={() => setHoveredBoxIndex(null)}
               onClick={() => setClickedBoxIndex(index)} // 클릭 이벤트
             >
-                   <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10PX", fontWeight: "bolder", fontSize: "28px" }}>
+                   <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10px", fontWeight: "bolder", fontSize: "28px" }}>
                 {box.title}
               </p>
-              <p style={{paddingTop:"10px",paddingLeft: "20px", margin: 0 ,color:"rgba(0, 0, 0, 0.41)",fontSize:"21px" }}>
-                {box.hours} {box.time}
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+                {box.place_type}
               </p>
-              <p style={{ paddingTop:"5px",paddingLeft: "20px", margin: 0 ,color:"rgba(0, 0, 0, 0.41)" ,fontSize:"21px"}}>
-                {box.phone} {box.num}
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+                평점: {box.rating}
+              </p>
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+               {box.review}
               </p>
             </div>
           ))}
         </div>
       </div>
+
+
+
+     
 
       <BottomButtom navigate={navigate}/>
 
