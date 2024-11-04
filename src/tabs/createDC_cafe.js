@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
-import moveToNextCategory from "../utils/moveToNextCategory";
-import moveToPreviousCategory from "../utils/moveToPreviousCategory";
-import BottomButtom from "../components/BottomButton";
+import BottomButton from "../components/BottomButton";
 
 export default function CreateDCcafe() {
   const [smallBoxes, setSmallBoxes] = useState([]);
+  const [displayedBoxes, setDisplayedBoxes] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
   const [hoveredBoxIndex, setHoveredBoxIndex] = useState(null);
   const [clickedBoxIndex, setClickedBoxIndex] = useState(null);
   const [cafePic, setCafePic] = useState("");
 
-  const subCategory = JSON.parse(localStorage.getItem('subCategory'));
+  const subCategory = JSON.parse(localStorage.getItem("subCategory"));
   const bigBox = subCategory["카페"][0];
 
   useEffect(() => {
-    if (bigBox === "디저트") setCafePic('dessert');
-    else if (bigBox === "커피전문점") setCafePic('expert');
+    if (bigBox === "디저트") setCafePic("dessert");
+    else if (bigBox === "커피전문점") setCafePic("expert");
   }, [bigBox]);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function CreateDCcafe() {
       fetch(`http://15.165.28.79:3000/place/${cafePic}_cafe`)
         .then((response) => response.json())
         .then((data) => {
-          console.log("API 응답 데이터:", data); // API 응답 데이터를 확인
+          console.log("API 응답 데이터:", data);
           if (data.result) {
             const formattedBoxes = data.result.map((item) => ({
               title: item.name,
@@ -37,6 +37,7 @@ export default function CreateDCcafe() {
               longitude: item.longitude || "경도 정보 없음",
             }));
             setSmallBoxes(formattedBoxes);
+            setDisplayedBoxes(formattedBoxes.slice(0, 5)); // 초기 5개 아이템 표시
           }
         })
         .catch((error) => console.error("API 호출 에러:", error));
@@ -45,25 +46,22 @@ export default function CreateDCcafe() {
 
   const handleBoxClick = (index) => {
     setClickedBoxIndex(index);
-    const selectedBox = smallBoxes[index];
+    const selectedBox = displayedBoxes[index];
 
-    // 위도와 경도를 객체 형태로 저장
-    const coordinates = {
+    const coordinates = JSON.parse(localStorage.getItem("coordinates")) || {};
+    coordinates[bigBox] = {
       latitude: selectedBox.latitude,
       longitude: selectedBox.longitude,
     };
-    
-    // 기존 localStorage의 딕셔너리 가져오기
-    const existingData = JSON.parse(localStorage.getItem('coordinates')) || {};
-    
-    // 새로운 좌표 추가
-    existingData[selectedBox.title] = coordinates;
 
-    // localStorage에 저장 (문자열 형태로 변환)
-    localStorage.setItem('coordinates', JSON.stringify(existingData));
+    localStorage.setItem("coordinates", JSON.stringify(coordinates));
+    console.log("저장된 좌표:", coordinates);
+  };
 
-    // 저장한 후에 로그 출력
-    console.log(existingData); // 이제 올바른 값을 보여야 함
+  const handleRefresh = () => {
+    const nextIndex = (currentIndex + 5) % smallBoxes.length;
+    setCurrentIndex(nextIndex);
+    setDisplayedBoxes(smallBoxes.slice(nextIndex, nextIndex + 5));
   };
 
   return (
@@ -85,7 +83,6 @@ export default function CreateDCcafe() {
           justifyContent: "center",
         }}
       >
-        <div style={{ backgroundColor: "pink", width: "20px" }}></div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <p
             style={{
@@ -96,6 +93,7 @@ export default function CreateDCcafe() {
               marginRight: "244px",
               color: "rgba(255, 112, 116, 1)",
             }}
+            
           >
             데이트코스 생성
           </p>
@@ -138,6 +136,7 @@ export default function CreateDCcafe() {
               marginTop: "30px",
             }}
           >
+           
             <img
               src="../img/likeBtn.png"
               alt="like button"
@@ -159,7 +158,7 @@ export default function CreateDCcafe() {
         </div>
 
         <div id="smallBoxes">
-          {smallBoxes.map((box, index) => (
+          {displayedBoxes.map((box, index) => (
             <div
               key={index}
               id="smallBox"
@@ -186,39 +185,51 @@ export default function CreateDCcafe() {
               <p style={{ paddingTop: "20px", paddingLeft: "20px", margin:"0", marginBottom:"10px", fontWeight: "bolder", fontSize: "28px" }}>
                 {box.title}
               </p>
-              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize: "21px" }}>
                 {box.place_type}
               </p>
-              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize: "21px" }}>
                 평점: {box.rating}
               </p>
-              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize:"21px" }}>
+              <p style={{ paddingTop: "10px", paddingLeft: "20px", margin: 0, color:"rgba(0, 0, 0, 0.41)", fontSize: "21px" }}>
                 {box.review}
               </p>
             </div>
           ))}
+          <img
+            src="../img/refresh.png"
+            alt="refresh button"
+            onClick={handleRefresh}
+            style={{
+              cursor: "pointer",
+              width: "30px",
+              height: "30px",
+              marginTop: "50px",
+              marginLeft: "400px",
+            }}
+          />
         </div>
       </div>
 
-      <BottomButtom navigate={navigate}/>
+      <BottomButton navigate={navigate} />
 
       <div style={{ display: "flex", justifyContent: "center", marginTop: "80px", paddingBottom: "110px" }}>
         <img
           src="../img/FootHome.png"
           alt="home button"
-          style={{ cursor: "pointer", width: '180px' }}
+          style={{ cursor: "pointer", width: "180px" }}
           onClick={() => navigate("/createDC")}
         />
         <img
           src="../img/FootLike.png"
           alt="like button"
-          style={{ marginLeft: "100%", cursor: "pointer", width: '150px' }}
+          style={{ marginLeft: "100%", cursor: "pointer", width: "150px" }}
           onClick={() => navigate("/likedDC")}
         />
         <img
           src="../img/FootMypage.png"
           alt="mypage button"
-          style={{ marginLeft: "100%", cursor: "pointer", width: '150px' }}
+          style={{ marginLeft: "100%", cursor: "pointer", width: "150px" }}
           onClick={() => navigate("/myPage")}
         />
       </div>

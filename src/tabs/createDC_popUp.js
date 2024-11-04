@@ -8,12 +8,17 @@ export default function CreateDCpopUp() {
   const navigate = useNavigate();
   const [hoveredBoxIndex, setHoveredBoxIndex] = useState(null);
   const [clickedBoxIndex, setClickedBoxIndex] = useState(null);
+  const [refreshCount, setRefreshCount] = useState(0); // 리프레시 버튼 클릭 횟수
 
   const bigBox = "팝업";
   const popUpPic = "popUp";
 
   useEffect(() => {
     // 팝업 데이터를 API로부터 불러옴
+    fetchPopUpStores();
+  }, [refreshCount]); // 리프레시 버튼 클릭 시 새 데이터 로드
+
+  const fetchPopUpStores = () => {
     fetch("http://15.165.28.79:3000/place/popup")
       .then((response) => response.json())
       .then((data) => {
@@ -32,12 +37,12 @@ export default function CreateDCpopUp() {
         }
       })
       .catch((error) => console.error("API 호출 에러:", error));
-  }, [popUpPic]);
+  };
 
   const handleBoxClick = (index) => {
     setClickedBoxIndex(index);
     const selectedBox = smallBoxes[index];
-    
+
     // 위도와 경도를 객체 형태로 저장
     const coordinates = {
       latitude: selectedBox.latitude,
@@ -55,6 +60,10 @@ export default function CreateDCpopUp() {
 
     // 저장한 후에 로그 출력
     console.log(existingData); // 이제 올바른 값을 보여야 함
+  };
+
+  const handleRefreshClick = () => {
+    setRefreshCount(prevCount => prevCount + 1); // 리프레시 버튼 클릭 시 카운트 증가
   };
 
   return (
@@ -99,6 +108,7 @@ export default function CreateDCpopUp() {
               marginRight: "3px",
               cursor: "pointer",
             }}
+            onClick={handleRefreshClick} // 리프레시 버튼 클릭 이벤트
           />
         </div>
         <p
@@ -252,24 +262,16 @@ export default function CreateDCpopUp() {
           paddingBottom: "110px",
         }}
       >
-        <img
-          src="../img/FootHome.png"
-          alt="home button"
-          style={{ cursor: "pointer", width: "180px" }}
-          onClick={() => navigate("/createDC")}
-        />
-        <img
-          src="../img/FootLike.png"
-          alt="like button"
-          style={{ marginLeft: "100%", cursor: "pointer", width: "150px" }}
-          onClick={() => navigate("/likedDC")}
-        />
-        <img
-          src="../img/FootMy.png"
-          alt="my button"
-          style={{ marginLeft: "100%", cursor: "pointer", width: "150px" }}
-          onClick={() => navigate("/myDC")}
-        />
+        <p
+          style={{
+            fontSize: "20px",
+            marginTop: "30px",
+            marginBottom: "0",
+            textAlign: "center",
+          }}
+        >
+          리프레시 버튼을 클릭하여 새로운 팝업 스토어를 가져오세요!
+        </p>
       </div>
     </div>
   );
